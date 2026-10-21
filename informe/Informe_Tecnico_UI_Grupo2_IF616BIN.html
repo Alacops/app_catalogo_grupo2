@@ -25,8 +25,8 @@
     background:#ece7df;
     color:var(--tinta);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:11pt;
-    line-height:1.55;
+    font-size:10.6pt;
+    line-height:1.42;
   }
   .hoja{
     background:var(--papel);
@@ -38,15 +38,15 @@
   }
   h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--granate);line-height:1.2;text-wrap:balance;}
   h2{
-    font-size:16pt;margin:26px 0 10px;padding-bottom:6px;
+    font-size:15pt;margin:16px 0 8px;padding-bottom:5px;
     border-bottom:2px solid var(--dorado);
   }
   h2 .num{color:var(--dorado);font-size:14pt;margin-right:8px;}
-  h3{font-size:12.5pt;color:var(--marron);margin:16px 0 6px;}
-  h4{font-size:11pt;color:var(--granate-claro);margin:12px 0 4px;}
-  p{margin:6px 0;text-align:justify;}
-  ul,ol{margin:6px 0 6px 0;padding-left:20px;}
-  li{margin:3px 0;}
+  h3{font-size:12pt;color:var(--marron);margin:11px 0 5px;}
+  h4{font-size:10.6pt;color:var(--granate-claro);margin:10px 0 4px;}
+  p{margin:4px 0;text-align:justify;}
+  ul,ol{margin:4px 0 4px 0;padding-left:20px;}
+  li{margin:2px 0;}
   code{
     font-family:"SF Mono","Consolas","Roboto Mono",monospace;
     font-size:9.3pt;background:#f1ece4;color:#7a1f2b;
@@ -54,54 +54,59 @@
   }
   pre{
     font-family:"SF Mono","Consolas","Roboto Mono",monospace;
-    font-size:8.6pt;line-height:1.5;
+    font-size:7.9pt;line-height:1.38;
     background:var(--marron);color:#f3ece2;
-    padding:14px 16px;border-radius:8px;overflow-x:auto;
+    padding:9px 13px;border-radius:8px;overflow-x:auto;
     border-left:4px solid var(--dorado);
+    margin:8px 0;
   }
   pre.arbol{background:var(--fondo-bloque);color:var(--marron);border-left:4px solid var(--granate);}
   pre .kw{color:#f0b429;}
   pre .cm{color:#b08968;font-style:italic;}
-  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9.6pt;}
-  th{background:var(--granate);color:#fff;text-align:left;padding:7px 9px;font-weight:600;}
-  td{padding:6px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
+  table{width:100%;border-collapse:collapse;margin:7px 0;font-size:9.2pt;}
+  th{background:var(--granate);color:#fff;text-align:left;padding:5px 9px;font-weight:600;}
+  td{padding:4px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
   tr:nth-child(even) td{background:var(--fondo-bloque);}
   .tag{display:inline-block;background:#f1ece4;color:var(--marron);border:1px solid var(--linea);
     border-radius:20px;padding:2px 10px;font-size:8.6pt;margin:2px 3px 2px 0;font-weight:600;}
   .nota{
     background:var(--fondo-bloque);border:1px solid var(--linea);border-left:4px solid var(--dorado);
-    border-radius:6px;padding:10px 14px;margin:12px 0;font-size:9.8pt;
+    border-radius:6px;padding:8px 13px;margin:8px 0;font-size:9.4pt;
   }
   .nota b{color:var(--granate);}
-  figure.captura{margin:16px 0;}
-  figure.captura img{max-width:100%;max-height:230mm;width:auto;height:auto;border:1px solid var(--linea);border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
-  figure.captura figcaption{font-size:9.2pt;color:var(--gris);margin-top:6px;text-align:justify;}
+  figure.captura{margin:10px 0;text-align:center;}
+  figure.captura img{max-width:100%;max-height:95mm;width:auto;height:auto;border:1px solid var(--linea);border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  figure.captura figcaption{font-size:8.8pt;color:var(--gris);margin-top:5px;text-align:justify;}
   .total td{background:var(--granate)!important;color:#fff;font-weight:700;font-size:11pt;}
   .num-cell{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;color:var(--granate);}
   .ok{color:#2E7D32;font-weight:700;}
   .mono-sm{font-size:8.8pt;color:var(--gris);}
 
   /* ---------- Portada ---------- */
-  .portada{display:flex;flex-direction:column;min-height:253mm;}
-  .portada .sello{width:66px;height:66px;border-radius:14px;background:var(--granate);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;}
-  .portada .uni{font-size:10.5pt;letter-spacing:.5px;color:var(--granate);font-weight:700;text-transform:uppercase;margin-top:14px;}
-  .portada .fac{font-size:10pt;color:var(--gris);}
+  .portada{display:flex;flex-direction:column;min-height:253mm;text-align:center;}
+  .portada .escudo{height:138px;width:auto;display:block;margin:0 auto 12px;}
+  .portada .uni{font-size:11.5pt;letter-spacing:.5px;color:var(--granate);font-weight:700;text-transform:uppercase;line-height:1.3;}
+  .portada .fac{font-size:9.6pt;color:var(--gris);margin-top:4px;line-height:1.4;}
   .cover-mid{margin-top:auto;margin-bottom:auto;}
   .cover-kicker{color:var(--dorado-oscuro);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:10pt;}
   .cover-title{font-family:Georgia,serif;font-size:30pt;color:var(--granate);line-height:1.12;margin:10px 0 6px;}
-  .cover-sub{font-size:13pt;color:var(--marron);font-family:Georgia,serif;font-style:italic;}
-  .cover-rule{height:3px;width:120px;background:var(--dorado);margin:22px 0;}
-  .ficha{width:100%;font-size:10.2pt;}
+  .cover-sub{font-size:12.5pt;color:var(--marron);font-family:Georgia,serif;font-style:italic;max-width:150mm;margin:0 auto;}
+  .cover-rule{height:3px;width:120px;background:var(--dorado);margin:22px auto;}
+  .ficha{width:100%;max-width:160mm;margin:0 auto;font-size:10.2pt;text-align:left;}
   .ficha td{border-bottom:1px solid var(--linea);padding:7px 4px;}
   .ficha td:first-child{color:var(--gris-claro);width:34%;text-transform:uppercase;font-size:8.8pt;letter-spacing:.4px;font-weight:700;}
   .badge-20{display:inline-block;background:var(--dorado);color:#3a2a00;font-weight:800;border-radius:8px;padding:4px 12px;font-size:10pt;}
 
+  @page{size:A4;margin:14mm 15mm;}
   @media print{
     body{background:none;}
-    .hoja{box-shadow:none;margin:0;width:auto;min-height:auto;padding:16mm 15mm;}
-    h2{page-break-after:avoid;}
-    pre,table,.nota{page-break-inside:avoid;}
+    .hoja{box-shadow:none;margin:0;width:auto;min-height:auto;padding:0;}
+    .portada{min-height:auto;height:262mm;page-break-after:always;}
+    h2{page-break-after:avoid;margin-top:10px;}
+    h3,h4{page-break-after:avoid;}
+    pre,.nota{page-break-inside:avoid;}
+    tr{page-break-inside:avoid;}
+    figure.captura{page-break-inside:avoid;}
     .salto{page-break-before:always;}
   }
 </style>
@@ -111,9 +116,12 @@
 <!-- ================= PORTADA ================= -->
 <section class="hoja portada">
   <div>
-    <div class="sello">🎓</div>
+    <img class="escudo" src="capturas/escudo_unsaac.png" alt="Escudo de la Universidad Nacional de San Antonio Abad del Cusco">
     <div class="uni">Universidad Nacional de San Antonio Abad del Cusco</div>
-    <div class="fac">Escuela Profesional de Ingeniería Informática y de Sistemas</div>
+    <div class="fac">
+      Facultad de Ingeniería Eléctrica, Electrónica, Informática y Mecánica<br>
+      Escuela Profesional de Ingeniería Informática y de Sistemas
+    </div>
   </div>
 
   <div class="cover-mid">
@@ -318,21 +326,17 @@ LayoutBuilder(builder: (context, constraints) {
 <h2><span class="num">5.</span>Resultados y Evidencias</h2>
 
 <h3>5.1. Capturas de Pantalla</h3>
-<p>Las siguientes capturas se generaron de forma automática y determinista mediante una prueba de renderizado (<code>test/screenshot_generator_test.dart</code>) sobre el árbol de widgets real, con los datos ya actualizados (curso <b>IF616BIN</b> y códigos del grupo). Evidencian el <b>reflujo de columnas</b> ante distintos anchos.</p>
+<p>Las siguientes capturas se obtuvieron de la aplicación en ejecución (compilación web con los datos actualizados: curso <b>IF616BIN</b> y códigos del grupo), evidenciando el <b>reflujo de columnas</b> ante distintos anchos de pantalla con las fotografías reales de los productos.</p>
 
 <figure class="captura">
-  <img src="capturas/captura_movil_2col.png" alt="Catálogo en vista móvil a 2 columnas">
-  <figcaption><b>Figura 1.</b> Vista móvil (ancho lógico &lt; 600 pt) → rejilla a <b>2 columnas</b>. Se observa la cabecera institucional con los tres integrantes y sus códigos, el banner con degradado y los filtros en <code>Wrap</code>.</figcaption>
+  <img src="capturas/real_movil_2col.png" alt="Catálogo en vista móvil a 2 columnas">
+  <figcaption><b>Figura 1.</b> Vista móvil (ancho lógico &lt; 600 pt) → rejilla a <b>2 columnas</b>. Se observa la cabecera institucional con los tres integrantes y sus códigos, el banner con degradado (<code>Stack</code> + <code>LinearGradient</code>) y los filtros en <code>Wrap</code>.</figcaption>
 </figure>
 
 <figure class="captura">
-  <img src="capturas/captura_escritorio_4col.png" alt="Catálogo en vista escritorio a 4 columnas">
+  <img src="capturas/real_escritorio_4col.png" alt="Catálogo en vista escritorio a 4 columnas">
   <figcaption><b>Figura 2.</b> Vista escritorio (ancho lógico &ge; 840 pt) → la misma pantalla se reorganiza a <b>4 columnas</b> sin desbordamientos, confirmando el comportamiento adaptativo del <code>LayoutBuilder</code>.</figcaption>
 </figure>
-
-<div class="nota mono-sm">
-<b>Nota sobre las imágenes:</b> los marcadores con ícono de taza sustituyen a las fotografías remotas (<code>Image.network</code>) porque el entorno de prueba no accede a la red; esto activa el <code>errorBuilder</code> previsto en el diseño. El <i>layout</i>, la tipografía, los precios, las insignias y los colores se renderizan de forma fiel. Para reproducir: <code>flutter test test/screenshot_generator_test.dart</code>.
-</div>
 
 <h3>5.2. Análisis de Fragilidad</h3>
 <p>La sección más sensible al cambio de tamaño es la <b>rejilla de productos</b> (<code>GridView</code>): al depender del <code>childAspectRatio</code>, una proporción mal calibrada puede comprimir la tarjeta y provocar <i>overflow</i> interno; por ello se ajustó un ratio distinto por punto de quiebre. En segundo lugar, la <b>nube de filtros</b> (<code>Wrap</code>) es frágil porque su número de líneas cambia según el ancho, aunque al estar diseñada con <code>runSpacing</code> absorbe el reflujo sin romperse.</p>
