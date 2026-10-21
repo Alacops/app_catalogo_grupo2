@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Técnico UI/UX · Catálogo Aroma Sagrado · Grupo 2 · IF616BIN</title>
+<style>
+  :root{
+    --granate:#7A1F2B;
+    --granate-claro:#9A3340;
+    --dorado:#C9971F;
+    --dorado-oscuro:#946A00;
+    --marron:#3E2723;
+    --tinta:#1f1b18;
+    --gris:#5c5650;
+    --gris-claro:#8a837c;
+    --linea:#e4ddd4;
+    --fondo-bloque:#faf7f2;
+    --papel:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{
+    margin:0;
+    background:#ece7df;
+    color:var(--tinta);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:11pt;
+    line-height:1.55;
+  }
+  .hoja{
+    background:var(--papel);
+    width:210mm;
+    min-height:297mm;
+    margin:14px auto;
+    padding:22mm 20mm;
+    box-shadow:0 6px 24px rgba(0,0,0,.14);
+  }
+  h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--granate);line-height:1.2;text-wrap:balance;}
+  h2{
+    font-size:16pt;margin:26px 0 10px;padding-bottom:6px;
+    border-bottom:2px solid var(--dorado);
+  }
+  h2 .num{color:var(--dorado);font-size:14pt;margin-right:8px;}
+  h3{font-size:12.5pt;color:var(--marron);margin:16px 0 6px;}
+  h4{font-size:11pt;color:var(--granate-claro);margin:12px 0 4px;}
+  p{margin:6px 0;text-align:justify;}
+  ul,ol{margin:6px 0 6px 0;padding-left:20px;}
+  li{margin:3px 0;}
+  code{
+    font-family:"SF Mono","Consolas","Roboto Mono",monospace;
+    font-size:9.3pt;background:#f1ece4;color:#7a1f2b;
+    padding:1px 5px;border-radius:4px;
+  }
+  pre{
+    font-family:"SF Mono","Consolas","Roboto Mono",monospace;
+    font-size:8.6pt;line-height:1.5;
+    background:var(--marron);color:#f3ece2;
+    padding:14px 16px;border-radius:8px;overflow-x:auto;
+    border-left:4px solid var(--dorado);
+  }
+  pre.arbol{background:var(--fondo-bloque);color:var(--marron);border-left:4px solid var(--granate);}
+  pre .kw{color:#f0b429;}
+  pre .cm{color:#b08968;font-style:italic;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9.6pt;}
+  th{background:var(--granate);color:#fff;text-align:left;padding:7px 9px;font-weight:600;}
+  td{padding:6px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--fondo-bloque);}
+  .tag{display:inline-block;background:#f1ece4;color:var(--marron);border:1px solid var(--linea);
+    border-radius:20px;padding:2px 10px;font-size:8.6pt;margin:2px 3px 2px 0;font-weight:600;}
+  .nota{
+    background:var(--fondo-bloque);border:1px solid var(--linea);border-left:4px solid var(--dorado);
+    border-radius:6px;padding:10px 14px;margin:12px 0;font-size:9.8pt;
+  }
+  .nota b{color:var(--granate);}
+  figure.captura{margin:16px 0;}
+  figure.captura img{max-width:100%;max-height:230mm;width:auto;height:auto;border:1px solid var(--linea);border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  figure.captura figcaption{font-size:9.2pt;color:var(--gris);margin-top:6px;text-align:justify;}
+  .total td{background:var(--granate)!important;color:#fff;font-weight:700;font-size:11pt;}
+  .num-cell{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;color:var(--granate);}
+  .ok{color:#2E7D32;font-weight:700;}
+  .mono-sm{font-size:8.8pt;color:var(--gris);}
+
+  /* ---------- Portada ---------- */
+  .portada{display:flex;flex-direction:column;min-height:253mm;}
+  .portada .sello{width:66px;height:66px;border-radius:14px;background:var(--granate);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;}
+  .portada .uni{font-size:10.5pt;letter-spacing:.5px;color:var(--granate);font-weight:700;text-transform:uppercase;margin-top:14px;}
+  .portada .fac{font-size:10pt;color:var(--gris);}
+  .cover-mid{margin-top:auto;margin-bottom:auto;}
+  .cover-kicker{color:var(--dorado-oscuro);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:10pt;}
+  .cover-title{font-family:Georgia,serif;font-size:30pt;color:var(--granate);line-height:1.12;margin:10px 0 6px;}
+  .cover-sub{font-size:13pt;color:var(--marron);font-family:Georgia,serif;font-style:italic;}
+  .cover-rule{height:3px;width:120px;background:var(--dorado);margin:22px 0;}
+  .ficha{width:100%;font-size:10.2pt;}
+  .ficha td{border-bottom:1px solid var(--linea);padding:7px 4px;}
+  .ficha td:first-child{color:var(--gris-claro);width:34%;text-transform:uppercase;font-size:8.8pt;letter-spacing:.4px;font-weight:700;}
+  .badge-20{display:inline-block;background:var(--dorado);color:#3a2a00;font-weight:800;border-radius:8px;padding:4px 12px;font-size:10pt;}
+
+  @media print{
+    body{background:none;}
+    .hoja{box-shadow:none;margin:0;width:auto;min-height:auto;padding:16mm 15mm;}
+    h2{page-break-after:avoid;}
+    pre,table,.nota{page-break-inside:avoid;}
+    .salto{page-break-before:always;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PORTADA ================= -->
+<section class="hoja portada">
+  <div>
+    <div class="sello">🎓</div>
+    <div class="uni">Universidad Nacional de San Antonio Abad del Cusco</div>
+    <div class="fac">Escuela Profesional de Ingeniería Informática y de Sistemas</div>
+  </div>
+
+  <div class="cover-mid">
+    <div class="cover-kicker">Informe Técnico de Desarrollo · UI/UX</div>
+    <div class="cover-title">Catálogo Digital<br>«Aroma Sagrado · Cusco»</div>
+    <div class="cover-sub">Interfaz de usuario estática en Flutter para un emprendimiento local de café especial y cacao chuncho</div>
+    <div class="cover-rule"></div>
+    <div><span class="badge-20">Entrega Proyecto Integrador 02 · Grupo 2</span></div>
+  </div>
+
+  <div>
+    <table class="ficha">
+      <tr><td>Asignatura</td><td>Desarrollo de Software II — <b>IF616BIN</b></td></tr>
+      <tr><td>Unidad</td><td>Unidad I · Fundamentos de Dart, UI declarativa y UX</td></tr>
+      <tr><td>Proyecto</td><td>Catálogo de productos «Aroma Sagrado» (café y cacao de La Convención)</td></tr>
+      <tr><td>Integrantes<br>(Grupo 2)</td><td>
+        Edmil Jampier Saire Bustamante — Cód. <b>174449</b><br>
+        Alain Armando Condori Contreras — Cód. <b>021501</b><br>
+        Axel Aranibar Rojas — Cód. <b>220547</b>
+      </td></tr>
+      <tr><td>Docente</td><td>Mtro. Ing. Yover Collantes Valer</td></tr>
+      <tr><td>Semestre</td><td>2026-II</td></tr>
+      <tr><td>Fecha de entrega</td><td>21 de octubre de 2026 · Cusco, Perú</td></tr>
+      <tr><td>Repositorio</td><td class="mono-sm">https://github.com/&lt;usuario&gt;/app_catalogo_grupo2</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= CONTENIDO ================= -->
+<section class="hoja">
+
+<!-- 1 -->
+<h2><span class="num">1.</span>Introducción y Objetivos</h2>
+
+<h3>1.1. Descripción del Proyecto</h3>
+<p>El presente proyecto consiste en el desarrollo de la <b>interfaz de usuario (UI) de un catálogo digital</b> para «Aroma Sagrado», un emprendimiento cusqueño dedicado a la comercialización de café especial, cacao chuncho, miel orgánica y accesorios de preparación provenientes de los valles de La Convención (Santa Teresa, Echarati, Quillabamba y Ocobamba). La aplicación presenta productos de temporada, categorías, ofertas y una sección de recomendaciones, construida íntegramente con el framework <b>Flutter</b> y el lenguaje <b>Dart</b>.</p>
+
+<h3>1.2. Objetivo de la Interfaz</h3>
+<p>Presentar la información comercial de forma atractiva, jerárquica y legible, facilitando al usuario la exploración por categorías y la comparación de productos (precio, descuento, calificación y origen), con una experiencia que se adapte sin errores a pantallas de teléfono, tableta y escritorio.</p>
+<p>De manera específica, la interfaz busca:</p>
+<ul>
+  <li>Comunicar la identidad de marca (origen cusqueño, comercio justo, 100&nbsp;% orgánico) mediante una paleta coherente granate–dorado.</li>
+  <li>Demostrar el dominio de la <b>composición de widgets</b> y del <b>modelo de restricciones</b> de Flutter.</li>
+  <li>Garantizar <b>adaptabilidad</b> (<i>responsive</i>) y ausencia de desbordamientos (<code>overflow</code>).</li>
+  <li>Aplicar criterios de <b>accesibilidad y UX</b> (contraste, zonas táctiles, etiquetas semánticas).</li>
+</ul>
+
+<h3>1.3. Alcance de la Sesión</h3>
+<div class="nota">
+<b>Importante.</b> Esta entrega es <b>exclusivamente de UI estática</b>, construida sobre <code>StatelessWidget</code>. <u>No</u> incluye lógica de negocio, gestión de estado (<code>setState</code>, <i>providers</i>), navegación entre pantallas, ni persistencia de datos. Los datos mostrados provienen de una lista constante en memoria (<code>CatalogoData</code>) y los controles interactivos (favoritos, carrito, filtros) están declarados sin manejadores funcionales, conforme al alcance de la Unidad&nbsp;I.
+</div>
+
+<!-- 2 -->
+<h2><span class="num">2.</span>Arquitectura de Widgets y Estructura del Código</h2>
+
+<h3>2.1. Organización del Proyecto</h3>
+<p>El código se organizó por <b>responsabilidades</b>, separando datos, modelos, pantallas y componentes reutilizables, aplicando el principio <b>DRY</b> (<i>Don't Repeat Yourself</i>):</p>
+<pre class="arbol">lib/
+├── main.dart                         <span class="cm"># Punto de entrada + MaterialApp (tema global)</span>
+├── models/
+│   └── producto.dart                 <span class="cm"># Modelo inmutable de datos (solo estáticos)</span>
+├── data/
+│   └── catalogo_data.dart            <span class="cm"># Fuente de datos constante (productos y categorías)</span>
+├── screens/
+│   └── catalogo_screen.dart          <span class="cm"># Pantalla principal (ensambla la UI)</span>
+└── widgets/                          <span class="cm"># Componentes reutilizables (DRY)</span>
+    ├── cabecera_institucional.dart
+    ├── banner_promocional.dart
+    ├── filtro_categorias.dart
+    ├── tarjeta_producto.dart
+    ├── seccion_interesar.dart
+    └── panel_emprendimiento_info.dart</pre>
+<p><b>Justificación:</b> cada componente visual recurrente (tarjeta de producto, banner, filtros, cabecera) se extrajo a su propio <code>StatelessWidget</code> en <code>/lib/widgets</code> para favorecer la reutilización, la legibilidad y el mantenimiento. El modelo <code>Producto</code> se aísla en <code>/lib/models</code> y los datos de ejemplo en <code>/lib/data</code>, de modo que la capa de presentación no mezcla contenido con estructura.</p>
+
+<h3>2.2. Árbol de Widgets Principal (<i>Blueprint</i>)</h3>
+<pre class="arbol">Scaffold
+├── appBar: AppBar
+│   ├── title: Column (nombre + eslogan)
+│   └── actions: IconButton × 2        <span class="cm"># buscar, carrito (zona táctil ≥48×48)</span>
+├── body: SingleChildScrollView
+│   └── Column (crossAxisAlignment: stretch)
+│       ├── CabeceraInstitucional      <span class="cm"># Container → Row/Column (ficha del grupo)</span>
+│       ├── BannerPromocional          <span class="cm"># ClipRRect → Stack(StackFit.expand)</span>
+│       │   ├── Image.network (BoxFit.cover)
+│       │   ├── Positioned.fill → LinearGradient (contraste)
+│       │   ├── Positioned (badge de origen)
+│       │   └── Positioned (textos promocionales)
+│       ├── _seccion('Explorar por Categoría')
+│       ├── FiltroCategorias           <span class="cm"># Wrap → FilterChip[] (salto de línea fluido)</span>
+│       ├── _seccion('Catálogo de Productos de Temporada')
+│       ├── LayoutBuilder              <span class="cm"># mide el ancho disponible</span>
+│       │   └── GridView.builder → TarjetaProducto[]
+│       ├── _seccion('También te puede interesar')
+│       ├── SeccionInteresar          <span class="cm"># ListView horizontal</span>
+│       └── PanelEmprendimientoInfo    <span class="cm"># Container marrón (sellos de compromiso)</span>
+└── bottomNavigationBar: BottomNavigationBar (4 ítems)</pre>
+<p><b>¿Por qué esta estructura?</b> Se eligió <code>Column</code> para la disposición vertical general de la pantalla y <code>SingleChildScrollView</code> para permitir desplazamiento cuando el contenido excede el alto del dispositivo. Dentro, cada bloque es un widget independiente; los filtros usan <code>Wrap</code> porque su número de etiquetas es variable y debe reacomodarse por filas, mientras que la rejilla de productos usa <code>LayoutBuilder + GridView</code> para decidir el número de columnas según el ancho real.</p>
+
+</section>
+
+<!-- 3 -->
+<section class="hoja">
+<h2><span class="num">3.</span>Implementación de Widgets Clave y Decisiones de Diseño</h2>
+
+<p>La interfaz emplea de forma pertinente el repertorio de widgets estudiado en la unidad:</p>
+<div>
+  <span class="tag">Scaffold / AppBar</span><span class="tag">SingleChildScrollView</span><span class="tag">Column / Row</span>
+  <span class="tag">Container + BoxDecoration</span><span class="tag">Expanded / Flexible</span><span class="tag">Stack + Positioned</span>
+  <span class="tag">Wrap + FilterChip</span><span class="tag">LayoutBuilder</span><span class="tag">GridView.builder</span>
+  <span class="tag">ListView (horizontal)</span><span class="tag">ClipRRect</span><span class="tag">Image.network</span>
+  <span class="tag">Text (ellipsis/maxLines)</span><span class="tag">Icon (semanticLabel)</span><span class="tag">BottomNavigationBar</span>
+</div>
+
+<h3>3.1. Widgets de Contenido (Text, Image, Icon)</h3>
+<ul>
+  <li><b>Texto largo controlado:</b> el nombre del producto usa <code>maxLines: 2</code> y <code>overflow: TextOverflow.ellipsis</code> para que ningún título rompa la tarjeta (<code>tarjeta_producto.dart</code>).</li>
+  <li><b>Imágenes remotas con respaldo:</b> se usa <code>Image.network</code> con <code>fit: BoxFit.cover</code> para que la foto cubra el área sin deformarse, y un <code>errorBuilder</code> que muestra un ícono de café cuando la imagen no carga (evita cajas rotas).</li>
+  <li><b>Íconos accesibles:</b> el botón de favorito incorpora <code>semanticLabel: 'Agregar a favoritos'</code> y los <code>IconButton</code> de la barra superior definen <code>tooltip</code>.</li>
+</ul>
+
+<h3>3.2. Modelo de Caja (Padding, Margin, Container)</h3>
+<ul>
+  <li>Se adoptó una <b>unidad base de espaciado de 16&nbsp;pt</b> (márgenes de secciones y padding de tarjetas) para mantener ritmo visual consistente.</li>
+  <li><b>Margin vs. padding:</b> el <code>margin</code> separa las tarjetas y bloques entre sí (p. ej. <code>EdgeInsets.symmetric(horizontal:16, vertical:8)</code> del banner), mientras que el <code>padding</code> separa el contenido de su propio borde (p. ej. <code>EdgeInsets.all(10)</code> dentro de la tarjeta).</li>
+  <li>Se usó <code>BoxDecoration</code> para color, <code>borderRadius</code> (16&nbsp;pt) y <code>boxShadow</code>; respetando la regla de que el color va <u>dentro</u> de <code>BoxDecoration</code> y no en el parámetro <code>color</code> del <code>Container</code> para evitar el conflicto de asertación.</li>
+</ul>
+
+<h3>3.3. Layout Flexible (Row, Column, Expanded, Flexible)</h3>
+<pre><span class="cm">// tarjeta_producto.dart — reparto proporcional de la tarjeta</span>
+Column(children:[
+  Expanded(flex: 5, child: /* imagen con Stack */ ),   <span class="cm">// 5/11 del alto</span>
+  Expanded(flex: 6, child: /* info + precio + botón */ ), <span class="cm">// 6/11 del alto</span>
+])</pre>
+<p>Se usó <code>Expanded</code> con <code>flex</code> para repartir el alto de la tarjeta entre imagen (5) e información (6). En la fila de categoría/origen, el texto se envuelve en <code>Expanded</code> para que ocupe el espacio restante y se trunque con <i>ellipsis</i> si es necesario. Los alineamientos <code>mainAxisAlignment: spaceBetween</code> y <code>crossAxisAlignment: end</code> fijan el precio a la izquierda y el botón de compra a la derecha, anclados a la base.</p>
+
+<h3>3.4. Superposición y Flujo (Stack, Wrap)</h3>
+<pre><span class="cm">// banner_promocional.dart — superposición para legibilidad</span>
+Stack(fit: StackFit.expand, children:[
+  Image.network(..., fit: BoxFit.cover),
+  Positioned.fill(child: DecoratedBox(
+    decoration: BoxDecoration(gradient: LinearGradient(
+      begin: Alignment.topCenter, end: Alignment.bottomCenter,
+      colors:[ Colors.black.withValues(alpha:0.15),
+               Colors.black.withValues(alpha:0.85) ]))),
+  ),
+  Positioned(top:14,left:14, child: /* badge ORIGEN CUSCO */ ),
+  Positioned(left:16,right:16,bottom:14, child: /* títulos */ ),
+])</pre>
+<ul>
+  <li><b>Stack + Positioned</b> superpone un degradado oscuro sobre la foto para garantizar el contraste del texto blanco (insignias de descuento/novedad usan el mismo recurso en las tarjetas).</li>
+  <li><b>Wrap</b> en <code>filtro_categorias.dart</code> dispone los <code>FilterChip</code> con <code>spacing: 8</code> y <code>runSpacing: 8</code>, de modo que las categorías saltan de línea de forma fluida sin desbordamiento horizontal cuando no caben.</li>
+</ul>
+
+</section>
+
+<!-- 4 -->
+<section class="hoja">
+<h2><span class="num">4.</span>Adaptabilidad y Prevención de Errores de Layout</h2>
+
+<h3>4.1. Diseño Adaptativo (LayoutBuilder)</h3>
+<pre><span class="cm">// catalogo_screen.dart — número de columnas según el ancho medido</span>
+LayoutBuilder(builder: (context, constraints) {
+  final int crossAxisCount;
+  final double childAspectRatio;
+  <span class="kw">if</span> (constraints.maxWidth &lt; 600) {        <span class="cm">// Teléfono</span>
+    crossAxisCount = 2; childAspectRatio = 0.68;
+  } <span class="kw">else if</span> (constraints.maxWidth &lt; 840) { <span class="cm">// Tableta</span>
+    crossAxisCount = 3; childAspectRatio = 0.72;
+  } <span class="kw">else</span> {                                 <span class="cm">// Escritorio</span>
+    crossAxisCount = 4; childAspectRatio = 0.75;
+  }
+  <span class="kw">return</span> GridView.builder( ... );
+})</pre>
+<table>
+  <tr><th>Dispositivo</th><th>Ancho disponible</th><th>Columnas</th><th>childAspectRatio</th></tr>
+  <tr><td>📱 Teléfono</td><td><code>&lt; 600 pt</code></td><td class="num-cell">2</td><td>0.68</td></tr>
+  <tr><td>📟 Tableta</td><td><code>600 – 839 pt</code></td><td class="num-cell">3</td><td>0.72</td></tr>
+  <tr><td>🖥️ Escritorio</td><td><code>&ge; 840 pt</code></td><td class="num-cell">4</td><td>0.75</td></tr>
+</table>
+<p><b>LayoutBuilder (local) vs. MediaQuery (global):</b> se eligió <code>LayoutBuilder</code> porque entrega el ancho <i>real del espacio asignado al widget</i> (sus <i>constraints</i>), no el de toda la ventana. Esto hace que la rejilla sea reutilizable dentro de cualquier contenedor y no dependa del tamaño global de la pantalla.</p>
+
+<h3>4.2. Prevención de Errores (Overflow, Constraints)</h3>
+<ul>
+  <li><b><code>RenderFlex overflowed</code>:</b> se evitó envolviendo textos variables en <code>Expanded</code> + <code>TextOverflow.ellipsis</code> y usando <code>Wrap</code> para los chips de categoría.</li>
+  <li><b>Restricciones no acotadas (<i>unbounded</i>):</b> el <code>GridView</code> vive dentro de un <code>SingleChildScrollView</code>; para evitar el conflicto de alturas infinitas se configuró <code>shrinkWrap: true</code> y <code>physics: NeverScrollableScrollPhysics()</code>, delegando el <i>scroll</i> vertical al contenedor padre.</li>
+  <li><b>Scroll global:</b> toda la pantalla se envuelve en <code>SingleChildScrollView</code> para permitir desplazamiento cuando el contenido excede el alto del dispositivo.</li>
+</ul>
+<div class="nota"><b>Verificación.</b> Se revisó el comportamiento con <code>flutter analyze</code> (sin errores) y pruebas de <i>layout</i> a distintos anchos; no se observan desbordamientos (<code>RenderFlex</code>) ni franjas amarillo-negras del depurador en ninguno de los tres puntos de quiebre.</div>
+
+<h3>4.3. Accesibilidad y UX</h3>
+<ul>
+  <li><b>Zonas táctiles de 48×48 dp:</b> los <code>IconButton</code> de la <code>AppBar</code> y los ítems del <code>BottomNavigationBar</code> cumplen el mínimo de Material por defecto; el botón de favorito de la tarjeta se amplió explícitamente a un área de <code>48×48</code> dp (ícono visible de 40).</li>
+  <li><b>Contraste y legibilidad:</b> el banner aplica un degradado oscuro (<code>alpha 0.15 → 0.85</code>) bajo el texto blanco para asegurar lectura sobre la fotografía.</li>
+  <li><b>Color con significado (no decorativo):</b> rojo <code>#C62828</code> para descuentos, verde <code>#2E7D32</code> para «NUEVO» y granate para el precio y las acciones principales.</li>
+  <li><b>Etiquetas semánticas:</b> <code>semanticLabel</code> en íconos y <code>tooltip</code> en acciones, para soporte de lectores de pantalla.</li>
+</ul>
+
+</section>
+
+<!-- 5 -->
+<section class="hoja">
+<h2><span class="num">5.</span>Resultados y Evidencias</h2>
+
+<h3>5.1. Capturas de Pantalla</h3>
+<p>Las siguientes capturas se generaron de forma automática y determinista mediante una prueba de renderizado (<code>test/screenshot_generator_test.dart</code>) sobre el árbol de widgets real, con los datos ya actualizados (curso <b>IF616BIN</b> y códigos del grupo). Evidencian el <b>reflujo de columnas</b> ante distintos anchos.</p>
+
+<figure class="captura">
+  <img src="capturas/captura_movil_2col.png" alt="Catálogo en vista móvil a 2 columnas">
+  <figcaption><b>Figura 1.</b> Vista móvil (ancho lógico &lt; 600 pt) → rejilla a <b>2 columnas</b>. Se observa la cabecera institucional con los tres integrantes y sus códigos, el banner con degradado y los filtros en <code>Wrap</code>.</figcaption>
+</figure>
+
+<figure class="captura">
+  <img src="capturas/captura_escritorio_4col.png" alt="Catálogo en vista escritorio a 4 columnas">
+  <figcaption><b>Figura 2.</b> Vista escritorio (ancho lógico &ge; 840 pt) → la misma pantalla se reorganiza a <b>4 columnas</b> sin desbordamientos, confirmando el comportamiento adaptativo del <code>LayoutBuilder</code>.</figcaption>
+</figure>
+
+<div class="nota mono-sm">
+<b>Nota sobre las imágenes:</b> los marcadores con ícono de taza sustituyen a las fotografías remotas (<code>Image.network</code>) porque el entorno de prueba no accede a la red; esto activa el <code>errorBuilder</code> previsto en el diseño. El <i>layout</i>, la tipografía, los precios, las insignias y los colores se renderizan de forma fiel. Para reproducir: <code>flutter test test/screenshot_generator_test.dart</code>.
+</div>
+
+<h3>5.2. Análisis de Fragilidad</h3>
+<p>La sección más sensible al cambio de tamaño es la <b>rejilla de productos</b> (<code>GridView</code>): al depender del <code>childAspectRatio</code>, una proporción mal calibrada puede comprimir la tarjeta y provocar <i>overflow</i> interno; por ello se ajustó un ratio distinto por punto de quiebre. En segundo lugar, la <b>nube de filtros</b> (<code>Wrap</code>) es frágil porque su número de líneas cambia según el ancho, aunque al estar diseñada con <code>runSpacing</code> absorbe el reflujo sin romperse.</p>
+
+<!-- 6 -->
+<h2><span class="num">6.</span>Dificultades Encontradas y Soluciones</h2>
+<table>
+  <tr><th>Dificultad</th><th>Causa</th><th>Solución aplicada</th></tr>
+  <tr><td><code>GridView</code> dentro de <code>Column</code> con error de altura infinita</td><td>Restricciones verticales no acotadas (<i>unbounded</i>)</td><td><code>shrinkWrap: true</code> + <code>NeverScrollableScrollPhysics</code></td></tr>
+  <tr><td>Texto blanco ilegible sobre fotos claras del banner</td><td>Bajo contraste imagen/tipografía</td><td><code>LinearGradient</code> oscuro superpuesto con <code>Positioned.fill</code></td></tr>
+  <tr><td>Títulos de producto largos rompían la tarjeta</td><td>Texto de longitud variable</td><td><code>maxLines: 2</code> + <code>TextOverflow.ellipsis</code> dentro de <code>Expanded</code></td></tr>
+  <tr><td>Categorías desbordaban en una sola fila</td><td>Número variable de etiquetas</td><td><code>Wrap</code> con <code>spacing</code>/<code>runSpacing</code></td></tr>
+  <tr><td>Botón de favorito con zona táctil menor a 48&nbsp;dp</td><td>Contenedor de 40×40</td><td>Área táctil ampliada a 48×48 con <code>semanticLabel</code></td></tr>
+</table>
+<p><b>Aprendizaje principal:</b> el concepto más exigente fue el <b>modelo de restricciones de Flutter</b> («<i>constraints go down, sizes go up</i>»), clave para entender por qué un <code>GridView</code> necesita límites de altura y cómo <code>Expanded</code> reparte el espacio sin provocar desbordamientos.</p>
+
+<!-- 7 -->
+<h2><span class="num">7.</span>Conclusiones</h2>
+<ul>
+  <li>Se cumplieron los objetivos: una UI estática atractiva, jerárquica y <b>adaptable a tres puntos de quiebre</b> sin desbordamientos.</li>
+  <li>La <b>composición de widgets</b> y la extracción de componentes reutilizables (principio DRY) resultaron decisivas para un código limpio y mantenible.</li>
+  <li>El dominio del <b>modelo de restricciones</b> permitió combinar <code>Stack</code>, <code>Expanded</code>, <code>Wrap</code> y <code>GridView</code> de forma segura.</li>
+  <li><b>Mejoras futuras:</b> implementar estado (favoritos y filtros funcionales con <code>StatefulWidget</code>/<i>provider</i>), navegación a detalle de producto y carga de imágenes locales (<code>Image.asset</code>) para el modo sin conexión.</li>
+</ul>
+
+<!-- 8 -->
+<h2><span class="num">8.</span>Anexos</h2>
+<p><b>Anexo A — Código fuente.</b> Proyecto completo en el repositorio: <span class="mono-sm">https://github.com/&lt;usuario&gt;/app_catalogo_grupo2</span> · Carpeta local: <code>Trabajo_Grupal_2/app_catalogo_grupo2</code>.</p>
+
+<h4>Anexo B — Autoevaluación según la rúbrica (20 puntos)</h4>
+<table>
+  <tr><th>Criterio</th><th>Evidencia en el proyecto</th><th style="text-align:center">Puntaje</th></tr>
+  <tr>
+    <td><b>Cobertura de widgets</b></td>
+    <td>Uso pertinente de contenido, <code>Container</code>, <code>Row/Column</code>, <code>Expanded</code>, <code>Stack</code>, <code>Wrap</code>, <code>LayoutBuilder</code> y <code>GridView</code>.</td>
+    <td class="num-cell">4 / 4</td>
+  </tr>
+  <tr>
+    <td><b>Dominio del layout</b></td>
+    <td>Sin desbordamientos ni tamaños infinitos; reparto de espacio intencional (<code>flex</code> 5/6, <code>shrinkWrap</code>).</td>
+    <td class="num-cell">4 / 4</td>
+  </tr>
+  <tr>
+    <td><b>Calidad de UI</b></td>
+    <td>Jerarquía visual clara, paleta coherente granate–dorado y escala tipográfica consistente.</td>
+    <td class="num-cell">3 / 3</td>
+  </tr>
+  <tr>
+    <td><b>Adaptabilidad</b></td>
+    <td>Reorganización correcta en 3 anchos con puntos de quiebre justificados (600 / 840 pt).</td>
+    <td class="num-cell">3 / 3</td>
+  </tr>
+  <tr>
+    <td><b>Accesibilidad y UX</b></td>
+    <td>Contraste suficiente, zonas táctiles 48×48, etiquetas semánticas y color no decorativo.</td>
+    <td class="num-cell">2 / 2</td>
+  </tr>
+  <tr>
+    <td><b>Organización del código</b></td>
+    <td>Widgets y métodos con nombres descriptivos, <code>const</code> donde corresponde y sin anidamiento excesivo.</td>
+    <td class="num-cell">2 / 2</td>
+  </tr>
+  <tr>
+    <td><b>Documentación y evidencias</b></td>
+    <td>Informe breve con árbol de widgets, fragmentos de código y capturas en dos anchos.</td>
+    <td class="num-cell">2 / 2</td>
+  </tr>
+  <tr class="total"><td colspan="2">TOTAL</td><td class="num-cell" style="color:#fff">20 / 20</td></tr>
+</table>
+
+<p class="mono-sm" style="margin-top:18px;text-align:center;color:var(--gris-claro)">
+Universidad Nacional de San Antonio Abad del Cusco · Ingeniería Informática y de Sistemas · Desarrollo de Software II (IF616BIN) · Grupo 2 · 2026-II
+</p>
+
+</section>
+</body>
+</html>
