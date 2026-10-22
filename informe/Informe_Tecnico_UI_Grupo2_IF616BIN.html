@@ -77,6 +77,10 @@
   figure.captura{margin:16px 0;text-align:center;}
   figure.captura img{max-width:100%;max-height:170mm;width:auto;height:auto;border:1px solid var(--linea);border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
   figure.captura figcaption{font-size:9pt;color:var(--gris);margin-top:7px;text-align:justify;}
+  .capturas-duo{display:flex;gap:9mm;align-items:flex-start;justify-content:center;margin:14px 0;}
+  .capturas-duo figure.captura{flex:1 1 0;min-width:0;margin:0;}
+  .capturas-duo figure.captura img{max-height:100mm;}
+  .capturas-duo figure.captura figcaption{font-size:8.6pt;}
   .total td{background:var(--granate)!important;color:#fff;font-weight:700;font-size:11pt;}
   .num-cell{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;color:var(--granate);}
   .ok{color:#2E7D32;font-weight:700;}
@@ -99,7 +103,7 @@
   .ficha .integrantes td{border:none;background:transparent;padding:2px 0;font-size:10.2pt;
     text-transform:none;letter-spacing:0;font-weight:400;color:var(--tinta);width:auto;}
   .ficha .integrantes td.cod{text-align:right;white-space:nowrap;width:1%;
-    font-variant-numeric:tabular-nums;padding-left:16px;}
+    font-variant-numeric:tabular-nums;padding-left:16px;font-weight:700;color:var(--granate);}
   .ficha .integrantes td.cod b{color:var(--granate);}
   .badge-20{display:inline-block;background:var(--dorado);color:#3a2a00;font-weight:800;border-radius:8px;padding:4px 12px;font-size:10pt;}
 
@@ -113,7 +117,7 @@
     h3,h4{page-break-after:avoid;}
     pre,.nota{page-break-inside:avoid;}
     tr{page-break-inside:avoid;}
-    figure.captura{page-break-inside:avoid;}
+    figure.captura,.capturas-duo{page-break-inside:avoid;}
     .salto{page-break-before:always;}
   }
 </style>
@@ -337,15 +341,16 @@ LayoutBuilder(builder: (context, constraints) {
 <h3>5.1. Capturas de Pantalla</h3>
 <p>Las siguientes capturas se obtuvieron de la aplicación en ejecución (compilación web con los datos actualizados: curso <b>IF616BIN</b> y códigos del grupo), evidenciando el <b>reflujo de columnas</b> ante distintos anchos de pantalla con las fotografías reales de los productos.</p>
 
-<figure class="captura">
-  <img src="capturas/real_movil_2col.png" alt="Catálogo en vista móvil a 2 columnas">
-  <figcaption><b>Figura 1.</b> Vista móvil (ancho lógico &lt; 600 pt) → rejilla a <b>2 columnas</b>. Se observa la cabecera institucional con los tres integrantes y sus códigos, el banner con degradado (<code>Stack</code> + <code>LinearGradient</code>) y los filtros en <code>Wrap</code>.</figcaption>
-</figure>
-
-<figure class="captura">
-  <img src="capturas/real_escritorio_4col.png" alt="Catálogo en vista escritorio a 4 columnas">
-  <figcaption><b>Figura 2.</b> Vista escritorio (ancho lógico &ge; 840 pt) → la misma pantalla se reorganiza a <b>4 columnas</b> sin desbordamientos, confirmando el comportamiento adaptativo del <code>LayoutBuilder</code>.</figcaption>
-</figure>
+<div class="capturas-duo">
+  <figure class="captura">
+    <img src="capturas/real_movil_2col.png" alt="Catálogo en vista móvil a 2 columnas">
+    <figcaption><b>Figura 1.</b> Vista móvil (ancho lógico &lt; 600 pt) → rejilla a <b>2 columnas</b>, con la cabecera institucional, el banner con degradado (<code>Stack</code> + <code>LinearGradient</code>) y los filtros en <code>Wrap</code>.</figcaption>
+  </figure>
+  <figure class="captura">
+    <img src="capturas/real_escritorio_4col.png" alt="Catálogo en vista escritorio a 4 columnas">
+    <figcaption><b>Figura 2.</b> Vista escritorio (ancho lógico &ge; 840 pt) → la misma pantalla se reorganiza a <b>4 columnas</b> sin desbordamientos, confirmando el comportamiento adaptativo del <code>LayoutBuilder</code>.</figcaption>
+  </figure>
+</div>
 
 <h3>5.2. Análisis de Fragilidad</h3>
 <p>La sección más sensible al cambio de tamaño es la <b>rejilla de productos</b> (<code>GridView</code>): al depender del <code>childAspectRatio</code>, una proporción mal calibrada puede comprimir la tarjeta y provocar <i>overflow</i> interno; por ello se ajustó un ratio distinto por punto de quiebre. En segundo lugar, la <b>nube de filtros</b> (<code>Wrap</code>) es frágil porque su número de líneas cambia según el ancho, aunque al estar diseñada con <code>runSpacing</code> absorbe el reflujo sin romperse.</p>
@@ -373,7 +378,7 @@ LayoutBuilder(builder: (context, constraints) {
 
 <!-- 8 -->
 <h2><span class="num">8.</span>Anexos</h2>
-<p><b>Anexo A — Código fuente.</b> Proyecto completo en el repositorio: <span class="mono-sm">https://github.com/Alacops/app_catalogo_grupo2</span> · Carpeta local: <code>Trabajo_Grupal_2/app_catalogo_grupo2</code>.</p>
+<p style="text-align:left;"><b>Anexo A — Código fuente.</b> Proyecto completo en el repositorio: <span class="mono-sm">https://github.com/Alacops/app_catalogo_grupo2</span> · Carpeta local: <code>Trabajo_Grupal_2/app_catalogo_grupo2</code>.</p>
 
 <h4>Anexo B — Autoevaluación según la rúbrica (20 puntos)</h4>
 <table>
