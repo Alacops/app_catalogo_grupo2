@@ -25,8 +25,8 @@
     background:#ece7df;
     color:var(--tinta);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:10.6pt;
-    line-height:1.42;
+    font-size:11pt;
+    line-height:1.55;
   }
   .hoja{
     background:var(--papel);
@@ -38,15 +38,15 @@
   }
   h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--granate);line-height:1.2;text-wrap:balance;}
   h2{
-    font-size:15pt;margin:16px 0 8px;padding-bottom:5px;
+    font-size:16pt;margin:22px 0 10px;padding-bottom:6px;
     border-bottom:2px solid var(--dorado);
   }
-  h2 .num{color:var(--dorado);font-size:14pt;margin-right:8px;}
-  h3{font-size:12pt;color:var(--marron);margin:11px 0 5px;}
-  h4{font-size:10.6pt;color:var(--granate-claro);margin:10px 0 4px;}
-  p{margin:4px 0;text-align:justify;}
-  ul,ol{margin:4px 0 4px 0;padding-left:20px;}
-  li{margin:2px 0;}
+  h2 .num{color:var(--dorado);font-size:15pt;margin-right:8px;}
+  h3{font-size:12.5pt;color:var(--marron);margin:15px 0 6px;}
+  h4{font-size:11pt;color:var(--granate-claro);margin:12px 0 4px;}
+  p{margin:6px 0;text-align:justify;}
+  ul,ol{margin:6px 0 6px 0;padding-left:22px;}
+  li{margin:3px 0;}
   code{
     font-family:"SF Mono","Consolas","Roboto Mono",monospace;
     font-size:9.3pt;background:#f1ece4;color:#7a1f2b;
@@ -54,29 +54,29 @@
   }
   pre{
     font-family:"SF Mono","Consolas","Roboto Mono",monospace;
-    font-size:7.9pt;line-height:1.38;
+    font-size:8.6pt;line-height:1.5;
     background:var(--marron);color:#f3ece2;
-    padding:9px 13px;border-radius:8px;overflow-x:auto;
+    padding:13px 16px;border-radius:8px;overflow-x:auto;
     border-left:4px solid var(--dorado);
-    margin:8px 0;
+    margin:10px 0;
   }
   pre.arbol{background:var(--fondo-bloque);color:var(--marron);border-left:4px solid var(--granate);}
   pre .kw{color:#f0b429;}
   pre .cm{color:#b08968;font-style:italic;}
-  table{width:100%;border-collapse:collapse;margin:7px 0;font-size:9.2pt;}
-  th{background:var(--granate);color:#fff;text-align:left;padding:5px 9px;font-weight:600;}
-  td{padding:4px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9.6pt;}
+  th{background:var(--granate);color:#fff;text-align:left;padding:7px 9px;font-weight:600;}
+  td{padding:6px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
   tr:nth-child(even) td{background:var(--fondo-bloque);}
   .tag{display:inline-block;background:#f1ece4;color:var(--marron);border:1px solid var(--linea);
     border-radius:20px;padding:2px 10px;font-size:8.6pt;margin:2px 3px 2px 0;font-weight:600;}
   .nota{
     background:var(--fondo-bloque);border:1px solid var(--linea);border-left:4px solid var(--dorado);
-    border-radius:6px;padding:8px 13px;margin:8px 0;font-size:9.4pt;
+    border-radius:6px;padding:10px 14px;margin:12px 0;font-size:9.8pt;
   }
   .nota b{color:var(--granate);}
-  figure.captura{margin:10px 0;text-align:center;}
-  figure.captura img{max-width:100%;max-height:95mm;width:auto;height:auto;border:1px solid var(--linea);border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
-  figure.captura figcaption{font-size:8.8pt;color:var(--gris);margin-top:5px;text-align:justify;}
+  figure.captura{margin:16px 0;text-align:center;}
+  figure.captura img{max-width:100%;max-height:170mm;width:auto;height:auto;border:1px solid var(--linea);border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  figure.captura figcaption{font-size:9pt;color:var(--gris);margin-top:7px;text-align:justify;}
   .total td{background:var(--granate)!important;color:#fff;font-weight:700;font-size:11pt;}
   .num-cell{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;color:var(--granate);}
   .ok{color:#2E7D32;font-weight:700;}
@@ -93,16 +93,23 @@
   .cover-sub{font-size:12.5pt;color:var(--marron);font-family:Georgia,serif;font-style:italic;max-width:150mm;margin:0 auto;}
   .cover-rule{height:3px;width:120px;background:var(--dorado);margin:22px auto;}
   .ficha{width:100%;max-width:160mm;margin:0 auto;font-size:10.2pt;text-align:left;}
-  .ficha td{border-bottom:1px solid var(--linea);padding:7px 4px;}
-  .ficha td:first-child{color:var(--gris-claro);width:34%;text-transform:uppercase;font-size:8.8pt;letter-spacing:.4px;font-weight:700;}
+  .ficha > tbody > tr > td{border-bottom:1px solid var(--linea);padding:7px 4px;}
+  .ficha > tbody > tr > td:first-child{color:var(--gris-claro);width:34%;text-transform:uppercase;font-size:8.8pt;letter-spacing:.4px;font-weight:700;}
+  .ficha .integrantes{width:100%;margin:0;border-collapse:collapse;}
+  .ficha .integrantes td{border:none;background:transparent;padding:2px 0;font-size:10.2pt;
+    text-transform:none;letter-spacing:0;font-weight:400;color:var(--tinta);width:auto;}
+  .ficha .integrantes td.cod{text-align:right;white-space:nowrap;width:1%;
+    font-variant-numeric:tabular-nums;padding-left:16px;}
+  .ficha .integrantes td.cod b{color:var(--granate);}
   .badge-20{display:inline-block;background:var(--dorado);color:#3a2a00;font-weight:800;border-radius:8px;padding:4px 12px;font-size:10pt;}
 
-  @page{size:A4;margin:14mm 15mm;}
+  /* Márgenes de informe oficial: sup. 25mm · inf. 25mm · izq. 30mm (encuadernado) · der. 25mm */
+  @page{size:A4;margin:25mm 25mm 25mm 30mm;}
   @media print{
     body{background:none;}
     .hoja{box-shadow:none;margin:0;width:auto;min-height:auto;padding:0;}
-    .portada{min-height:auto;height:262mm;page-break-after:always;}
-    h2{page-break-after:avoid;margin-top:10px;}
+    .portada{min-height:auto;height:243mm;page-break-after:always;}
+    h2{page-break-after:avoid;margin-top:16px;}
     h3,h4{page-break-after:avoid;}
     pre,.nota{page-break-inside:avoid;}
     tr{page-break-inside:avoid;}
@@ -138,9 +145,11 @@
       <tr><td>Unidad</td><td>Unidad I · Fundamentos de Dart, UI declarativa y UX</td></tr>
       <tr><td>Proyecto</td><td>Catálogo de productos «Aroma Sagrado» (café y cacao de La Convención)</td></tr>
       <tr><td>Integrantes<br>(Grupo 2)</td><td>
-        Edmil Jampier Saire Bustamante — Cód. <b>174449</b><br>
-        Alain Armando Condori Contreras — Cód. <b>021501</b><br>
-        Axel Aranibar Rojas — Cód. <b>220547</b>
+        <table class="integrantes"><tbody>
+          <tr><td class="nom">Edmil Jampier Saire Bustamante</td><td class="cod">Cód. <b>174449</b></td></tr>
+          <tr><td class="nom">Alain Armando Condori Contreras</td><td class="cod">Cód. <b>021501</b></td></tr>
+          <tr><td class="nom">Axel Aranibar Rojas</td><td class="cod">Cód. <b>220547</b></td></tr>
+        </tbody></table>
       </td></tr>
       <tr><td>Docente</td><td>Mtro. Ing. Yover Collantes Valer</td></tr>
       <tr><td>Semestre</td><td>2026-II</td></tr>
