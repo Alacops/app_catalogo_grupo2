@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:app_catalogo_grupo2/providers/carrito_provider.dart';
+import 'package:app_catalogo_grupo2/providers/favoritos_provider.dart';
 import 'package:app_catalogo_grupo2/screens/catalogo_screen.dart';
 
 /// Carpeta de salida de las capturas (relativa a la raíz del proyecto):
@@ -69,7 +73,12 @@ Future<void> _capturar(
   final GlobalKey key = GlobalKey();
 
   await tester.pumpWidget(
-    MaterialApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoritosProvider()),
+        ChangeNotifierProvider(create: (_) => CarritoProvider()),
+      ],
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         platform: TargetPlatform.android,
@@ -93,6 +102,7 @@ Future<void> _capturar(
       home: RepaintBoundary(
         key: key,
         child: const CatalogoScreen(),
+      ),
       ),
     ),
   );
@@ -118,7 +128,10 @@ Future<void> _capturar(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(_cargarFuentesCompletas);
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    await _cargarFuentesCompletas();
+  });
 
   // 1. Vista móvil: ancho lógico ~411 pt -> 2 columnas.
   testWidgets('Captura catálogo en vista móvil (2 columnas)',

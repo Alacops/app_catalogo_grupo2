@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
 /// ============================================================================
-/// FILTRO DE CATEGORÍAS CON WRAP Y FILTERCHIP (Requerimiento 2)
-/// Permite salto de línea fluido sin provocar desbordamiento horizontal
+/// FILTRO DE CATEGORÍAS CON WRAP Y FILTERCHIP (ahora funcional)
+/// Notifica al padre la categoría elegida mediante [onSeleccion] (estado local).
 /// ============================================================================
 
 class FiltroCategorias extends StatelessWidget {
   final List<String> categorias;
   final String categoriaSeleccionada;
+  final ValueChanged<String> onSeleccion;
 
   const FiltroCategorias({
     super.key,
     required this.categorias,
-    this.categoriaSeleccionada = 'Todos',
+    required this.categoriaSeleccionada,
+    required this.onSeleccion,
   });
 
   @override
@@ -27,7 +29,7 @@ class FiltroCategorias extends StatelessWidget {
           return FilterChip(
             label: Text(cat),
             selected: isSelected,
-            onSelected: null, // Stateless: interfaz estática
+            onSelected: (_) => onSeleccion(cat),
             selectedColor: const Color(0xFF7A1F2B),
             checkmarkColor: Colors.white,
             labelStyle: TextStyle(

@@ -1,7 +1,8 @@
 # 🍫☕ Catálogo «Aroma Sagrado · Cusco»
 
-Interfaz de usuario (UI) estática desarrollada en **Flutter** para un emprendimiento
-local cusqueño de **café especial y cacao chuncho** de los valles de La Convención.
+Aplicación en **Flutter** para un emprendimiento local cusqueño de **café especial
+y cacao chuncho** de los valles de La Convención. Evolucionó de una UI estática
+(Unidad I) a una app con **estado, persistencia y formularios** (Unidad II).
 
 **Proyecto Integrador 02 — Desarrollo de Software II (IF616BIN)**
 Universidad Nacional de San Antonio Abad del Cusco · Escuela Profesional de Ingeniería Informática y de Sistemas · Semestre 2026-II
@@ -20,32 +21,47 @@ Universidad Nacional de San Antonio Abad del Cusco · Escuela Profesional de Ing
 
 ---
 
-## 🎯 Alcance
+## 🧩 Unidad II — Estado, Persistencia y Formularios
 
-Entrega **exclusivamente de UI estática** (`StatelessWidget`), sin lógica de negocio,
-gestión de estado ni persistencia. Los datos provienen de una lista constante en memoria.
+- **Manejo de estado** con `provider` + `ChangeNotifier`:
+  - `FavoritosProvider` — marcar/desmarcar favoritos.
+  - `CarritoProvider` — carrito con cantidades, subtotales y total.
+  - **Estado local** (`setState`) para la búsqueda y el filtro por categoría.
+- **Persistencia** con `shared_preferences`: favoritos y carrito **sobreviven al cierre**
+  de la app (ids como `StringList`; carrito serializado a JSON).
+- **Formularios** con `Form` + `GlobalKey<FormState>`: checkout con `TextFormField`,
+  `DropdownButtonFormField`, `inputFormatters` y validaciones (nombre, celular 9 dígitos,
+  correo, dirección, términos).
+- **Navegación** con `BottomNavigationBar` + `IndexedStack` y `Badge` en favoritos/carrito.
 
-## ✨ Características de la interfaz
+## ✨ Funcionalidades
 
-- **Cabecera institucional** con la ficha oficial del grupo.
-- **Banner promocional** con `Stack` + `LinearGradient` para garantizar contraste.
-- **Filtros por categoría** con `Wrap` + `FilterChip` (reflujo sin desbordamiento).
-- **Rejilla adaptativa** con `LayoutBuilder` + `GridView.builder`:
-  - 📱 `< 600 pt` → **2 columnas**
-  - 📟 `600–839 pt` → **3 columnas**
-  - 🖥️ `≥ 840 pt` → **4 columnas**
-- **Carrusel horizontal** de recomendaciones con `ListView`.
-- **Accesibilidad:** zonas táctiles de 48×48 dp, etiquetas semánticas y color con significado.
+- **Catálogo** con buscador y filtros por categoría funcionales.
+- **Ofertas**, **Favoritos** y **Carrito** como pantallas dedicadas (con estados vacíos).
+- **Checkout** con validación y confirmación de pedido (vacía el carrito al confirmar).
+- Base de UI de la Unidad I: cabecera institucional, banner (`Stack` + `LinearGradient`),
+  rejilla **adaptativa** (`LayoutBuilder` → 2/3/4 columnas), accesibilidad 48×48 dp.
 
 ## 🗂️ Estructura
 
 ```
 lib/
-├── main.dart                     # MaterialApp + tema global
-├── models/producto.dart          # Modelo inmutable
-├── data/catalogo_data.dart       # Datos estáticos
-├── screens/catalogo_screen.dart  # Pantalla principal
-└── widgets/                      # Componentes reutilizables (DRY)
+├── main.dart                      # MultiProvider + MaterialApp + tema
+├── models/
+│   ├── producto.dart              # Modelo + toJson/fromJson
+│   └── item_carrito.dart          # Línea de carrito (producto + cantidad)
+├── data/catalogo_data.dart        # Datos + búsqueda por id
+├── providers/
+│   ├── favoritos_provider.dart    # Estado + persistencia de favoritos
+│   └── carrito_provider.dart      # Estado + persistencia del carrito
+├── screens/
+│   ├── main_screen.dart           # Navegación inferior (IndexedStack)
+│   ├── catalogo_screen.dart       # Búsqueda + filtros (setState)
+│   ├── ofertas_screen.dart
+│   ├── favoritos_screen.dart
+│   ├── carrito_screen.dart        # Cantidades, total y checkout
+│   └── checkout_screen.dart       # Formulario con validación
+└── widgets/                       # Componentes reutilizables (DRY)
 ```
 
 ## ▶️ Cómo ejecutar

@@ -1,23 +1,55 @@
 import 'package:flutter/material.dart';
+
 import '../data/catalogo_data.dart';
+import '../models/producto.dart';
 import '../widgets/banner_promocional.dart';
 import '../widgets/cabecera_institucional.dart';
 import '../widgets/filtro_categorias.dart';
+import '../widgets/grilla_productos.dart';
 import '../widgets/panel_emprendimiento_info.dart';
 import '../widgets/seccion_interesar.dart';
-import '../widgets/tarjeta_producto.dart';
 
 /// ============================================================================
-/// PANTALLA PRINCIPAL — CATÁLOGO DE PRODUCTOS DE EMPRENDIMIENTO LOCAL
-/// Proyecto Integrador 2 — Sesión 6 — UNSAAC (IF616BIN)
-/// Equipo: Grupo 2 (Saire Bustamante, Condori Contreras, Aranibar Rojas)
+/// PANTALLA PRINCIPAL — CATÁLOGO con BÚSQUEDA y FILTROS funcionales
+/// Estado LOCAL (setState): categoría seleccionada y texto de búsqueda.
+/// UNSAAC (IF616BIN) — Grupo 2 (Saire Bustamante, Condori Contreras, Aranibar)
 /// ============================================================================
 
-class CatalogoScreen extends StatelessWidget {
+class CatalogoScreen extends StatefulWidget {
   const CatalogoScreen({super.key});
 
   @override
+  State<CatalogoScreen> createState() => _CatalogoScreenState();
+}
+
+class _CatalogoScreenState extends State<CatalogoScreen> {
+  String _categoria = 'Todos';
+  String _busqueda = '';
+  final TextEditingController _buscadorCtrl = TextEditingController();
+
+  /// Productos que cumplen el filtro de categoría y el texto de búsqueda.
+  List<Producto> get _filtrados {
+    final q = _busqueda.trim().toLowerCase();
+    return CatalogoData.productos.where((p) {
+      final coincideCategoria = _categoria == 'Todos' || p.categoria == _categoria;
+      final coincideBusqueda = q.isEmpty ||
+          p.nombre.toLowerCase().contains(q) ||
+          p.categoria.toLowerCase().contains(q) ||
+          p.origen.toLowerCase().contains(q);
+      return coincideCategoria && coincideBusqueda;
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    _buscadorCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final filtrados = _filtrados;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
@@ -27,162 +59,120 @@ class CatalogoScreen extends StatelessWidget {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Aroma Sagrado · Cusco',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 0.3),
-            ),
-            Text(
-              'Café Especial & Cacao Chuncho de La Convención',
-              style: TextStyle(fontSize: 11, color: Colors.white70),
-            ),
+            Text('Aroma Sagrado · Cusco',
+                style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 0.3)),
+            Text('Café Especial & Cacao Chuncho de La Convención',
+                style: TextStyle(fontSize: 11, color: Colors.white70)),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-            tooltip: 'Buscar producto',
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_bag_outlined),
-            onPressed: () {},
-            tooltip: 'Carrito',
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 1. Ficha Académica Oficial del Grupo 2
             const CabeceraInstitucional(),
-
-            // 2. Banner promocional con Stack y degradado (Requerimiento 1)
             const BannerPromocional(),
 
-            // 3. Filtros por categoría con Wrap y FilterChip (Requerimiento 2)
-            _seccion('Explorar por Categoría'),
-            const FiltroCategorias(
-              categorias: CatalogoData.categorias,
-              categoriaSeleccionada: 'Todos',
-            ),
-
-            // 4. Rejilla principal adaptativa con LayoutBuilder y GridView (Requerimientos 3 y 4)
-            _seccion('Catálogo de Productos de Temporada'),
+            // Buscador (estado local)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  // Comportamiento adaptativo exigido por el PDF oficial:
-                  // - Móvil (< 600 pt): 2 columnas
-                  // - Tableta (600 a 839 pt): 3 columnas
-                  // - Escritorio (>= 840 pt): 4 columnas
-                  final int crossAxisCount;
-                  final double childAspectRatio;
-
-                  if (constraints.maxWidth < 600) {
-                    crossAxisCount = 2;
-                    childAspectRatio = 0.68;
-                  } else if (constraints.maxWidth < 840) {
-                    crossAxisCount = 3;
-                    childAspectRatio = 0.72;
-                  } else {
-                    crossAxisCount = 4;
-                    childAspectRatio = 0.75;
-                  }
-
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: childAspectRatio,
-                    ),
-                    itemCount: CatalogoData.productos.length,
-                    itemBuilder: (context, index) {
-                      return TarjetaProducto(
-                        producto: CatalogoData.productos[index],
-                      );
-                    },
-                  );
-                },
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: TextField(
+                controller: _buscadorCtrl,
+                onChanged: (v) => setState(() => _busqueda = v),
+                textInputAction: TextInputAction.search,
+                decoration: InputDecoration(
+                  hintText: 'Buscar café, cacao, origen…',
+                  prefixIcon: const Icon(Icons.search, color: Color(0xFF7A1F2B)),
+                  suffixIcon: _busqueda.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.close),
+                          tooltip: 'Limpiar',
+                          onPressed: () {
+                            _buscadorCtrl.clear();
+                            setState(() => _busqueda = '');
+                          },
+                        ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: const BorderSide(color: Color(0xFF7A1F2B), width: 1.5),
+                  ),
+                ),
               ),
             ),
 
-            const SizedBox(height: 12),
-
-            // 5. Sección «También te puede interesar» con ListView horizontal (Requerimiento 5)
-            _seccion('También te puede interesar'),
-            const SeccionInteresar(
-              productos: CatalogoData.productosInteresar,
+            _tituloSeccion('Explorar por Categoría'),
+            FiltroCategorias(
+              categorias: CatalogoData.categorias,
+              categoriaSeleccionada: _categoria,
+              onSeleccion: (c) => setState(() => _categoria = c),
             ),
 
-            const SizedBox(height: 12),
+            _tituloSeccion('Catálogo de Productos (${filtrados.length})'),
+            if (filtrados.isEmpty)
+              _sinResultados()
+            else
+              GrillaProductos(productos: filtrados),
 
-            // 6. Panel de Compromiso de Origen y Comercio Justo
-            _seccion('Nuestra Historia y Origen'),
+            const SizedBox(height: 12),
+            _tituloSeccion('También te puede interesar'),
+            const SeccionInteresar(productos: CatalogoData.productosInteresar),
+
+            const SizedBox(height: 12),
+            _tituloSeccion('Nuestra Historia y Origen'),
             const PanelEmprendimientoInfo(),
 
             const SizedBox(height: 24),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: const Color(0xFF7A1F2B),
-        unselectedItemColor: Colors.black45,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.storefront),
-            label: 'Catálogo',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer_outlined),
-            label: 'Ofertas',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Favoritos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Mi Cuenta',
-          ),
-        ],
+    );
+  }
+
+  Widget _tituloSeccion(String titulo) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+      child: Text(
+        titulo,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF3E2723),
+          letterSpacing: 0.2,
+        ),
       ),
     );
   }
 
-  /// ============================================================================
-  /// ENCABEZADO DE SECCIÓN REUTILIZABLE (Requerimiento 6)
-  /// Método privado para garantizar espaciado y tipografía consistente
-  /// ============================================================================
-  Widget _seccion(String titulo) {
+  Widget _sinResultados() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+      child: Column(
         children: [
-          Text(
-            titulo,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF3E2723),
-              letterSpacing: 0.2,
-            ),
-          ),
+          Icon(Icons.search_off, size: 48, color: Colors.grey.shade400),
+          const SizedBox(height: 8),
           const Text(
-            'Ver todo',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF7A1F2B),
-            ),
+            'No se encontraron productos',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Prueba con otra categoría o término de búsqueda.',
+            style: TextStyle(fontSize: 12.5, color: Colors.black45),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

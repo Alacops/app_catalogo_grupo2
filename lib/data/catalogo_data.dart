@@ -158,4 +158,15 @@ class CatalogoData {
       origen: 'Accesorio Barista',
     ),
   ];
+
+  /// Lista unificada (catálogo de temporada + recomendaciones) para búsquedas.
+  static List<Producto> get todos => [...productos, ...productosInteresar];
+
+  /// Busca un producto por su id en todo el catálogo. Devuelve null si no existe.
+  static Producto? buscarPorId(String id) {
+    for (final p in todos) {
+      if (p.id == id) return p;
+    }
+    return null;
+  }
 }

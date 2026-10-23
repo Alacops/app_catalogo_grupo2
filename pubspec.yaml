@@ -35,6 +35,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  # Manejo de estado compartido (Unidad II)
+  provider: ^6.1.2
+  # Persistencia local de datos (favoritos y carrito)
+  shared_preferences: ^2.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
