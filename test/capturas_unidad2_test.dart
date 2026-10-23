@@ -17,8 +17,11 @@ import 'package:app_catalogo_grupo2/screens/catalogo_screen.dart';
 import 'package:app_catalogo_grupo2/screens/checkout_screen.dart';
 import 'package:app_catalogo_grupo2/screens/favoritos_screen.dart';
 
+import 'support/fake_network_images.dart';
+
 /// Generador de capturas de evidencia para la Unidad II (estado, persistencia,
-/// formularios). Pre-carga favoritos y carrito vía SharedPreferences mock.
+/// formularios). Pre-carga favoritos y carrito vía SharedPreferences mock y
+/// sirve las fotos reales de los productos vía [FakeImageHttpOverrides].
 const String _carpetaSalida = 'informe/capturas';
 
 Future<void> _cargarFuentes() async {
@@ -116,7 +119,14 @@ Future<void> _capturar(
 
   await tester.pump(const Duration(milliseconds: 300));
 
+  // Dentro de runAsync la red simulada y la decodificación de las imágenes sí
+  // se ejecutan; bombeamos varias veces para que los frames se reconstruyan ya
+  // con las fotos cargadas antes de capturar.
   await tester.runAsync(() async {
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 120));
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+    }
     final boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
     if (boundary == null) return;
     final image = await boundary.toImage(pixelRatio: 2.0);
@@ -133,7 +143,10 @@ Future<void> _capturar(
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  setUpAll(_cargarFuentes);
+  setUpAll(() async {
+    HttpOverrides.global = FakeImageHttpOverrides();
+    await _cargarFuentes();
+  });
 
   testWidgets('u2 catalogo', (tester) async {
     _sembrarEstado();
