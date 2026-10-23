@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Unidad II · Estado, Persistencia y Formularios · Grupo 2 · IF616BIN</title>
+<style>
+  :root{
+    --granate:#7A1F2B; --granate-claro:#9A3340; --dorado:#C9971F; --dorado-oscuro:#946A00;
+    --marron:#3E2723; --tinta:#1f1b18; --gris:#5c5650; --gris-claro:#8a837c;
+    --linea:#e4ddd4; --fondo-bloque:#faf7f2; --papel:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{margin:0;background:#ece7df;color:var(--tinta);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:11pt;line-height:1.55;}
+  .hoja{background:var(--papel);width:210mm;min-height:297mm;margin:14px auto;padding:22mm 20mm;
+    box-shadow:0 6px 24px rgba(0,0,0,.14);}
+  h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--granate);line-height:1.2;text-wrap:balance;}
+  h2{font-size:16pt;margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--dorado);}
+  h2 .num{color:var(--dorado);font-size:15pt;margin-right:8px;}
+  h3{font-size:12.5pt;color:var(--marron);margin:15px 0 6px;}
+  h4{font-size:11pt;color:var(--granate-claro);margin:12px 0 4px;}
+  p{margin:6px 0;text-align:justify;}
+  ul,ol{margin:6px 0 6px 0;padding-left:22px;}
+  li{margin:3px 0;}
+  code{font-family:"SF Mono","Consolas","Roboto Mono",monospace;font-size:9.3pt;
+    background:#f1ece4;color:#7a1f2b;padding:1px 5px;border-radius:4px;}
+  pre{font-family:"SF Mono","Consolas","Roboto Mono",monospace;font-size:8.6pt;line-height:1.5;
+    background:var(--marron);color:#f3ece2;padding:13px 16px;border-radius:8px;overflow-x:auto;
+    border-left:4px solid var(--dorado);margin:10px 0;}
+  pre.arbol{background:var(--fondo-bloque);color:var(--marron);border-left:4px solid var(--granate);}
+  pre .kw{color:#f0b429;} pre .cm{color:#b08968;font-style:italic;} pre .st{color:#f3a683;}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9.6pt;}
+  th{background:var(--granate);color:#fff;text-align:left;padding:7px 9px;font-weight:600;}
+  td{padding:6px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--fondo-bloque);}
+  .tag{display:inline-block;background:#f1ece4;color:var(--marron);border:1px solid var(--linea);
+    border-radius:20px;padding:2px 10px;font-size:8.6pt;margin:2px 3px 2px 0;font-weight:600;}
+  .nota{background:var(--fondo-bloque);border:1px solid var(--linea);border-left:4px solid var(--dorado);
+    border-radius:6px;padding:10px 14px;margin:12px 0;font-size:9.8pt;}
+  .nota b{color:var(--granate);}
+  figure.captura{margin:16px 0;text-align:center;}
+  figure.captura img{max-width:100%;max-height:150mm;width:auto;height:auto;border:1px solid var(--linea);
+    border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  figure.captura figcaption{font-size:9pt;color:var(--gris);margin-top:7px;text-align:justify;}
+  .duo{display:flex;gap:9mm;align-items:flex-start;justify-content:center;margin:14px 0;}
+  .duo figure.captura{flex:1 1 0;min-width:0;margin:0;}
+  .duo figure.captura img{max-height:120mm;}
+  .duo figure.captura figcaption{font-size:8.6pt;}
+  .total td{background:var(--granate)!important;color:#fff;font-weight:700;font-size:11pt;}
+  .num-cell{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;color:var(--granate);}
+  .mono-sm{font-size:8.8pt;color:var(--gris);}
+
+  .portada{display:flex;flex-direction:column;min-height:253mm;text-align:center;}
+  .portada .escudo{height:138px;width:auto;display:block;margin:0 auto 12px;}
+  .portada .uni{font-size:11.5pt;letter-spacing:.5px;color:var(--granate);font-weight:700;text-transform:uppercase;line-height:1.3;}
+  .portada .fac{font-size:9.6pt;color:var(--gris);margin-top:4px;line-height:1.4;}
+  .cover-mid{margin-top:auto;margin-bottom:auto;}
+  .cover-kicker{color:var(--dorado-oscuro);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:10pt;}
+  .cover-title{font-family:Georgia,serif;font-size:27pt;color:var(--granate);line-height:1.12;margin:10px 0 6px;}
+  .cover-sub{font-size:12.5pt;color:var(--marron);font-family:Georgia,serif;font-style:italic;max-width:155mm;margin:0 auto;}
+  .cover-rule{height:3px;width:120px;background:var(--dorado);margin:22px auto;}
+  .ficha{width:100%;max-width:160mm;margin:0 auto;font-size:10.2pt;text-align:left;}
+  .ficha > tbody > tr > td{border-bottom:1px solid var(--linea);padding:7px 4px;}
+  .ficha > tbody > tr > td:first-child{color:var(--gris-claro);width:34%;text-transform:uppercase;font-size:8.8pt;letter-spacing:.4px;font-weight:700;}
+  .ficha .integrantes{width:100%;margin:0;border-collapse:collapse;}
+  .ficha .integrantes td{border:none;background:transparent;padding:2px 0;font-size:10.2pt;text-transform:none;letter-spacing:0;font-weight:400;color:var(--tinta);width:auto;}
+  .ficha .integrantes td.cod{text-align:right;white-space:nowrap;width:1%;font-variant-numeric:tabular-nums;padding-left:16px;}
+  .badge-20{display:inline-block;background:var(--dorado);color:#3a2a00;font-weight:800;border-radius:8px;padding:4px 12px;font-size:10pt;}
+
+  @page{size:A4;margin:25mm 25mm 25mm 30mm;}
+  @media print{
+    body{background:none;}
+    .hoja{box-shadow:none;margin:0;width:auto;min-height:auto;padding:0;}
+    .portada{min-height:auto;height:243mm;page-break-after:always;}
+    h2{page-break-after:avoid;margin-top:12px;}
+    h3,h4{page-break-after:avoid;}
+    pre,.nota{page-break-inside:avoid;}
+    tr{page-break-inside:avoid;}
+    figure.captura,.duo{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== PORTADA ===================== -->
+<section class="hoja portada">
+  <div>
+    <img class="escudo" src="capturas/escudo_unsaac.png" alt="Escudo de la UNSAAC">
+    <div class="uni">Universidad Nacional de San Antonio Abad del Cusco</div>
+    <div class="fac">
+      Facultad de Ingeniería Eléctrica, Electrónica, Informática y Mecánica<br>
+      Escuela Profesional de Ingeniería Informática y de Sistemas
+    </div>
+  </div>
+  <div class="cover-mid">
+    <div class="cover-kicker">Informe Técnico · Unidad II</div>
+    <div class="cover-title">Estado, Persistencia<br>y Formularios</div>
+    <div class="cover-sub">Evolución de la app «Aroma Sagrado · Cusco»: de una interfaz estática a una aplicación con estado compartido, persistencia local y formularios validados en Flutter</div>
+    <div class="cover-rule"></div>
+    <div><span class="badge-20">Proyecto Integrador · Grupo 2</span></div>
+  </div>
+  <div>
+    <table class="ficha">
+      <tr><td>Asignatura</td><td>Desarrollo de Software II — <b>IF616BIN</b></td></tr>
+      <tr><td>Unidad</td><td>Unidad II · Estado, persistencia y formularios</td></tr>
+      <tr><td>Proyecto</td><td>Catálogo «Aroma Sagrado» (café y cacao de La Convención)</td></tr>
+      <tr><td>Integrantes<br>(Grupo 2)</td><td>
+        <table class="integrantes"><tbody>
+          <tr><td>Edmil Jampier Saire Bustamante</td><td class="cod">Cód. 174449</td></tr>
+          <tr><td>Alain Armando Condori Contreras</td><td class="cod">Cód. 021501</td></tr>
+          <tr><td>Axel Aranibar Rojas</td><td class="cod">Cód. 220547</td></tr>
+        </tbody></table>
+      </td></tr>
+      <tr><td>Docente</td><td>Mtro. Ing. Yover Collantes Valer</td></tr>
+      <tr><td>Semestre</td><td>2026-II</td></tr>
+      <tr><td>Fecha</td><td>23 de octubre de 2026 · Cusco, Perú</td></tr>
+      <tr><td>Repositorio</td><td class="mono-sm">https://github.com/Alacops/app_catalogo_grupo2</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== CONTENIDO ===================== -->
+<section class="hoja">
+
+<h2><span class="num">1.</span>Introducción y Objetivos</h2>
+<h3>1.1. Descripción</h3>
+<p>En la Unidad I se construyó la <b>interfaz de usuario estática</b> del catálogo «Aroma Sagrado». En esta Unidad II la aplicación <b>evoluciona</b> para incorporar <b>lógica de interacción</b>: se activan los controles que antes eran decorativos (favoritos, carrito, filtros) y se añade un <b>formulario de pedido</b>. Para ello se aplican los tres pilares de la unidad: <b>manejo de estado</b>, <b>persistencia de datos</b> y <b>formularios con validación</b>.</p>
+
+<h3>1.2. Objetivos</h3>
+<ul>
+  <li>Gestionar <b>estado compartido</b> (favoritos y carrito) con el paquete <code>provider</code> y <code>ChangeNotifier</code>.</li>
+  <li>Usar <b>estado local</b> (<code>setState</code>) para la búsqueda y el filtrado del catálogo.</li>
+  <li>Lograr <b>persistencia local</b> con <code>shared_preferences</code>, de modo que los datos sobrevivan al cierre de la app.</li>
+  <li>Implementar un <b>formulario</b> de pedido con <code>Form</code>, <code>TextFormField</code> y validaciones.</li>
+</ul>
+
+<h3>1.3. Alcance</h3>
+<div class="nota"><b>Alcance.</b> Esta entrega agrega <u>estado, persistencia y formularios</u> sobre la UI existente. No incluye backend remoto ni base de datos en la nube: la persistencia es <b>local en el dispositivo</b> mediante <code>shared_preferences</code>. Los datos del catálogo siguen siendo una lista constante en memoria (<code>CatalogoData</code>).</div>
+
+<h2><span class="num">2.</span>Arquitectura y Organización del Código</h2>
+<p>Se añadieron las capas <code>providers/</code> (estado) y se ampliaron <code>models/</code> y <code>screens/</code>, conservando el principio <b>DRY</b>:</p>
+<pre class="arbol">lib/
+├── main.dart                      <span class="cm"># MultiProvider + MaterialApp + tema</span>
+├── models/
+│   ├── producto.dart              <span class="cm"># + toJson / fromJson (serialización)</span>
+│   └── item_carrito.dart          <span class="cm"># línea de carrito: producto + cantidad</span>
+├── data/catalogo_data.dart        <span class="cm"># datos + buscarPorId()</span>
+├── providers/                     <span class="cm"># ESTADO COMPARTIDO (ChangeNotifier)</span>
+│   ├── favoritos_provider.dart
+│   └── carrito_provider.dart
+├── screens/
+│   ├── main_screen.dart           <span class="cm"># navegación (BottomNavigationBar + IndexedStack)</span>
+│   ├── catalogo_screen.dart       <span class="cm"># búsqueda + filtros (setState)</span>
+│   ├── ofertas_screen.dart  ·  favoritos_screen.dart
+│   ├── carrito_screen.dart        <span class="cm"># cantidades, total, checkout</span>
+│   └── checkout_screen.dart       <span class="cm"># FORMULARIO con validación</span>
+└── widgets/                       <span class="cm"># tarjeta, grilla, filtros… (reutilizables)</span></pre>
+
+<h4>Flujo de datos</h4>
+<pre class="arbol">   UI (widgets)  ──lee──►  Provider (ChangeNotifier)  ──persiste──►  SharedPreferences
+        ▲                        │                                        │
+        └────notifyListeners()───┘◄──────────── carga al iniciar ─────────┘</pre>
+<p>La interfaz <b>lee</b> el estado desde el provider; cuando el usuario actúa, el provider <b>modifica</b> el estado, llama a <code>notifyListeners()</code> (la UI se reconstruye) y <b>guarda</b> en <code>SharedPreferences</code>. Al iniciar, el provider <b>carga</b> el estado persistido.</p>
+
+</section>
+
+<!-- Estado -->
+<section class="hoja">
+<h2><span class="num">3.</span>Manejo de Estado</h2>
+<div>
+  <span class="tag">provider</span><span class="tag">ChangeNotifier</span><span class="tag">MultiProvider</span>
+  <span class="tag">context.watch</span><span class="tag">context.select</span><span class="tag">context.read</span>
+  <span class="tag">Consumer</span><span class="tag">setState</span><span class="tag">Badge</span>
+</div>
+
+<h3>3.1. Estado compartido con provider + ChangeNotifier</h3>
+<p>Los datos usados por varias pantallas (favoritos y carrito) se centralizan en clases <code>ChangeNotifier</code>, inyectadas en la raíz con <code>MultiProvider</code>:</p>
+<pre><span class="cm">// main.dart</span>
+MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (_) => FavoritosProvider()),
+    ChangeNotifierProvider(create: (_) => CarritoProvider()),
+  ],
+  child: MaterialApp( ... ),
+)</pre>
+<pre><span class="cm">// carrito_provider.dart (extracto)</span>
+class CarritoProvider <span class="kw">extends</span> ChangeNotifier {
+  <span class="kw">final</span> Map&lt;String, ItemCarrito&gt; _items = {};
+
+  <span class="kw">double</span> <span class="kw">get</span> total =&gt;
+      _items.values.fold(0.0, (s, i) =&gt; s + i.subtotal);
+
+  <span class="kw">void</span> agregar(Producto p) {
+    _items.containsKey(p.id) ? _items[p.id]!.cantidad++
+                             : _items[p.id] = ItemCarrito(producto: p);
+    notifyListeners();   <span class="cm">// reconstruye la UI</span>
+    _guardar();          <span class="cm">// persiste el cambio</span>
+  }
+}</pre>
+
+<h3>3.2. Estado local con setState</h3>
+<p>El <b>estado efímero</b> de la pantalla de catálogo (categoría y texto de búsqueda) no necesita compartirse: se maneja localmente con <code>setState</code> en un <code>StatefulWidget</code>.</p>
+<pre><span class="cm">// catalogo_screen.dart</span>
+onChanged: (v) =&gt; setState(() =&gt; _busqueda = v),      <span class="cm">// buscador</span>
+onSeleccion: (c) =&gt; setState(() =&gt; _categoria = c),   <span class="cm">// filtro de categoría</span></pre>
+
+<h3>3.3. Consumo eficiente del estado</h3>
+<ul>
+  <li><b><code>context.select</code></b> en la tarjeta: reconstruye <i>solo</i> cuando cambia el estado de <i>ese</i> producto (favorito/cantidad), no toda la grilla.</li>
+  <li><b><code>Consumer</code></b> en la pantalla de favoritos.</li>
+  <li><b><code>context.read</code></b> para ejecutar acciones (p. ej. <code>alternar</code>, <code>agregar</code>).</li>
+  <li><b><code>Badge</code></b> en la barra inferior muestra el número de favoritos y de ítems del carrito en tiempo real.</li>
+</ul>
+
+</section>
+
+<!-- Persistencia -->
+<section class="hoja">
+<h2><span class="num">4.</span>Persistencia de Datos</h2>
+<div>
+  <span class="tag">shared_preferences</span><span class="tag">getStringList</span><span class="tag">setString</span>
+  <span class="tag">jsonEncode / jsonDecode</span><span class="tag">toJson / fromJson</span>
+</div>
+
+<h3>4.1. Almacenamiento local</h3>
+<p>Se usa <code>shared_preferences</code> (almacenamiento clave–valor del dispositivo). Cada provider define su clave y persiste tras cada cambio:</p>
+<table>
+  <tr><th>Dato</th><th>Clave</th><th>Formato</th></tr>
+  <tr><td>Favoritos</td><td><code>favoritos_ids</code></td><td>Lista de ids (<code>setStringList</code>)</td></tr>
+  <tr><td>Carrito</td><td><code>carrito_items</code></td><td>JSON de líneas (<code>setString</code>)</td></tr>
+</table>
+
+<h3>4.2. Serialización (toJson / fromJson)</h3>
+<p>Para guardar el carrito se serializan los objetos a JSON y se reconstruyen al cargar:</p>
+<pre><span class="cm">// producto.dart</span>
+Map&lt;String, dynamic&gt; toJson() =&gt; { 'id': id, 'nombre': nombre, ... };
+<span class="kw">factory</span> Producto.fromJson(Map&lt;String, dynamic&gt; j) =&gt; Producto( ... );
+
+<span class="cm">// carrito_provider.dart — guardar / cargar</span>
+<span class="kw">await</span> prefs.setString('carrito_items',
+    jsonEncode(_items.values.map((i) =&gt; i.toJson()).toList()));
+
+<span class="kw">final</span> lista = jsonDecode(raw) <span class="kw">as</span> List;
+<span class="kw">for</span> (<span class="kw">final</span> e <span class="kw">in</span> lista) {
+  <span class="kw">final</span> item = ItemCarrito.fromJson(e);
+  _items[item.producto.id] = item;
+}</pre>
+
+<h3>4.3. Ciclo de vida del estado persistido</h3>
+<p>El constructor del provider invoca <code>_cargar()</code> al crearse; cada acción invoca <code>_guardar()</code>. Así, si el usuario agrega productos y cierra la app, al volver a abrirla <b>el carrito y los favoritos siguen ahí</b> (ver Figura 2).</p>
+
+</section>
+
+<!-- Formularios -->
+<section class="hoja">
+<h2><span class="num">5.</span>Formularios y Validación</h2>
+<div>
+  <span class="tag">Form</span><span class="tag">GlobalKey&lt;FormState&gt;</span><span class="tag">TextFormField</span>
+  <span class="tag">validator</span><span class="tag">DropdownButtonFormField</span><span class="tag">inputFormatters</span>
+  <span class="tag">CheckboxListTile</span>
+</div>
+
+<h3>5.1. Estructura del formulario</h3>
+<p>La pantalla de <b>checkout</b> envuelve los campos en un <code>Form</code> controlado por un <code>GlobalKey&lt;FormState&gt;</code>. Al confirmar, <code>validate()</code> ejecuta todos los <code>validator</code> y muestra los mensajes de error.</p>
+<pre><span class="cm">// checkout_screen.dart</span>
+<span class="kw">final</span> _formKey = GlobalKey&lt;FormState&gt;();
+
+<span class="kw">void</span> _enviar() {
+  <span class="kw">if</span> (!_formKey.currentState!.validate()) <span class="kw">return</span>;   <span class="cm">// valida todo</span>
+  <span class="kw">if</span> (!_aceptaTerminos) { <span class="cm">/* exige aceptar términos */</span> return; }
+  _mostrarConfirmacion();   <span class="cm">// resumen + vaciar carrito</span>
+}</pre>
+
+<h3>5.2. Validaciones implementadas</h3>
+<table>
+  <tr><th>Campo</th><th>Widget</th><th>Validación</th></tr>
+  <tr><td>Nombre completo</td><td><code>TextFormField</code></td><td>Requerido, mínimo 5 caracteres</td></tr>
+  <tr><td>Celular</td><td><code>TextFormField</code> + <code>inputFormatters</code></td><td>Solo dígitos, 9 cifras, empieza con 9</td></tr>
+  <tr><td>Correo</td><td><code>TextFormField</code></td><td>Requerido, formato de email (RegExp)</td></tr>
+  <tr><td>Modalidad / Distrito / Pago</td><td><code>DropdownButtonFormField</code></td><td>Selección de lista</td></tr>
+  <tr><td>Dirección</td><td><code>TextFormField</code></td><td>Requerida solo si es <i>Delivery</i> (condicional)</td></tr>
+  <tr><td>Términos</td><td><code>CheckboxListTile</code></td><td>Obligatorio aceptarlos</td></tr>
+</table>
+<pre><span class="cm">// Ejemplo: validación del celular</span>
+validator: (v) {
+  <span class="kw">final</span> t = (v ?? '').trim();
+  <span class="kw">if</span> (t.isEmpty) <span class="kw">return</span> <span class="st">'Ingresa tu número de celular'</span>;
+  <span class="kw">if</span> (!RegExp(r'^9\d{8}$').hasMatch(t))
+    <span class="kw">return</span> <span class="st">'Debe tener 9 dígitos y empezar con 9'</span>;
+  <span class="kw">return</span> <span class="kw">null</span>;   <span class="cm">// válido</span>
+}</pre>
+
+<h3>5.3. Envío y confirmación</h3>
+<p>Si el formulario es válido, se muestra un diálogo con el <b>resumen del pedido</b> (modalidad, pago, total) y, al aceptar, se <b>vacía el carrito</b> y se regresa al inicio con un aviso de éxito.</p>
+
+</section>
+
+<!-- Evidencias -->
+<section class="hoja">
+<h2><span class="num">6.</span>Resultados y Evidencias</h2>
+
+<div class="duo">
+  <figure class="captura">
+    <img src="capturas/u2_favoritos.png" alt="Pantalla de favoritos">
+    <figcaption><b>Figura 1.</b> <b>Favoritos</b> persistidos: los productos marcados con ♥ se conservan y se listan en su pantalla (estado + persistencia).</figcaption>
+  </figure>
+  <figure class="captura">
+    <img src="capturas/u2_carrito.png" alt="Pantalla de carrito">
+    <figcaption><b>Figura 2.</b> <b>Carrito</b> con cantidades (−/+), subtotales y <b>total S/ 102.00</b>; se recalcula y persiste automáticamente.</figcaption>
+  </figure>
+</div>
+
+<figure class="captura">
+  <img src="capturas/u2_checkout.png" alt="Formulario de checkout con validaciones">
+  <figcaption><b>Figura 3.</b> <b>Formulario de pedido</b> mostrando las <b>validaciones</b> activadas (campos requeridos en rojo), los <code>DropdownButtonFormField</code> de entrega/pago y el resumen del total.</figcaption>
+</figure>
+
+<div class="nota mono-sm"><b>Nota.</b> Los marcadores con ícono de taza sustituyen a las fotografías remotas porque las capturas se generan en un entorno de prueba sin acceso a la red; el estado, los totales, los textos y las validaciones se renderizan de forma fiel. Reproducir: <code>flutter test test/capturas_unidad2_test.dart</code>.</div>
+
+<h2><span class="num">7.</span>Dificultades y Soluciones</h2>
+<table>
+  <tr><th>Dificultad</th><th>Solución</th></tr>
+  <tr><td>Compartir el carrito/favoritos entre varias pantallas sin repetir lógica</td><td>Centralizar en <code>ChangeNotifier</code> + <code>provider</code> (una sola fuente de verdad)</td></tr>
+  <tr><td>Que la grilla completa se reconstruyera al tocar un solo corazón</td><td>Usar <code>context.select</code> para reconstruir únicamente la tarjeta afectada</td></tr>
+  <tr><td>Persistir objetos complejos del carrito</td><td>Serializar con <code>toJson/fromJson</code> + <code>jsonEncode/Decode</code></td></tr>
+  <tr><td>Reflejar el conteo del carrito en la barra inferior</td><td><code>Badge</code> alimentado por <code>context.watch</code></td></tr>
+  <tr><td>Validar dirección solo cuando aplica</td><td>Validación <b>condicional</b> según la modalidad (Delivery/Recojo)</td></tr>
+</table>
+<p><b>Aprendizaje:</b> distinguir cuándo usar <b>estado local</b> (<code>setState</code>, efímero) frente a <b>estado compartido</b> (<code>provider</code>, de app) fue el concepto más valioso de la unidad.</p>
+
+<h2><span class="num">8.</span>Conclusiones</h2>
+<ul>
+  <li>Se integraron correctamente los <b>tres pilares</b>: estado (provider/ChangeNotifier + setState), persistencia (shared_preferences) y formularios (Form + validación).</li>
+  <li>La app pasó de ser una vitrina estática a una <b>experiencia interactiva</b>: favoritos, carrito y pedido funcionales que <b>sobreviven al cierre</b>.</li>
+  <li>El uso de <code>provider</code> mantuvo el código <b>limpio y escalable</b>, separando UI y lógica de estado.</li>
+  <li><b>Mejoras futuras:</b> autenticación, sincronización con un backend (Supabase/Firebase) e historial de pedidos.</li>
+</ul>
+
+<h2><span class="num">9.</span>Anexos</h2>
+<p style="text-align:left;"><b>Anexo A — Código fuente.</b> Repositorio: <span class="mono-sm">https://github.com/Alacops/app_catalogo_grupo2</span></p>
+<h4>Anexo B — Autoevaluación (20 puntos)</h4>
+<table>
+  <tr><th>Criterio</th><th>Evidencia</th><th style="text-align:center">Puntaje</th></tr>
+  <tr><td><b>Manejo de estado</b></td><td>provider + ChangeNotifier (favoritos/carrito) y setState (búsqueda/filtros); consumo con select/watch/read.</td><td class="num-cell">5 / 5</td></tr>
+  <tr><td><b>Persistencia</b></td><td>shared_preferences con claves dedicadas; serialización JSON; datos sobreviven al cierre.</td><td class="num-cell">5 / 5</td></tr>
+  <tr><td><b>Formularios y validación</b></td><td>Form + GlobalKey, TextFormField/Dropdown, inputFormatters, validaciones (incl. condicional) y confirmación.</td><td class="num-cell">5 / 5</td></tr>
+  <tr><td><b>UX y navegación</b></td><td>BottomNavigationBar + IndexedStack, Badges, estados vacíos y mensajes (SnackBar/diálogo).</td><td class="num-cell">3 / 3</td></tr>
+  <tr><td><b>Calidad y documentación</b></td><td><code>flutter analyze</code> sin incidencias, código comentado, informe y capturas.</td><td class="num-cell">2 / 2</td></tr>
+  <tr class="total"><td colspan="2">TOTAL</td><td class="num-cell" style="color:#fff">20 / 20</td></tr>
+</table>
+
+<p class="mono-sm" style="margin-top:16px;text-align:center;color:var(--gris-claro)">
+UNSAAC · Ingeniería Informática y de Sistemas · Desarrollo de Software II (IF616BIN) · Grupo 2 · Unidad II · 2026-II</p>
+
+</section>
+</body>
+</html>
