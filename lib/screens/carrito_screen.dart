@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../models/item_carrito.dart';
 import '../providers/carrito_provider.dart';
-import 'checkout_screen.dart';
 
 /// Pantalla del carrito: lista editable (cantidades) con total y checkout.
 class CarritoScreen extends StatelessWidget {
@@ -221,10 +220,7 @@ class _ResumenTotal extends StatelessWidget {
                 backgroundColor: const Color(0xFF7A1F2B),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const CheckoutScreen()),
-              ),
+              onPressed: () => Navigator.pushNamed(context, '/checkout'),
               icon: const Icon(Icons.receipt_long),
               label: const Text('Realizar pedido',
                   style: TextStyle(fontWeight: FontWeight.bold)),

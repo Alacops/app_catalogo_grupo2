@@ -1,10 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Sensores (Sesión 7: GPS y Cámara) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
-        android:label="app_catalogo_grupo2"
+        android:label="Aroma Sagrado"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
+            android:name="pe.edu.unsaac.epis.app_catalogo_grupo2.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:taskAffinity=""

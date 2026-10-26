@@ -17,6 +17,10 @@ import 'package:app_catalogo_grupo2/screens/catalogo_screen.dart';
 import 'package:app_catalogo_grupo2/screens/checkout_screen.dart';
 import 'package:app_catalogo_grupo2/screens/favoritos_screen.dart';
 
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:app_catalogo_grupo2/services/preferencias_service.dart';
+import 'package:app_catalogo_grupo2/providers/tema_provider.dart';
+
 import 'support/fake_network_images.dart';
 
 /// Generador de capturas de evidencia para la Unidad II (estado, persistencia,
@@ -96,6 +100,7 @@ Future<void> _capturar(
   await tester.pumpWidget(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => TemaProvider()),
         ChangeNotifierProvider(create: (_) => FavoritosProvider()),
         ChangeNotifierProvider(create: (_) => CarritoProvider()),
       ],
@@ -144,6 +149,10 @@ Future<void> _capturar(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+    SharedPreferences.setMockInitialValues({});
+    await PreferenciasService.inicializar();
     HttpOverrides.global = FakeImageHttpOverrides();
     await _cargarFuentes();
   });
@@ -183,8 +192,8 @@ void main() {
         dpr: 2.4,
         archivo: 'u2_checkout.png',
         interaccion: (t) async {
-      // Toca "Confirmar pedido" con campos vacíos para mostrar las validaciones.
-      final boton = find.text('Confirmar pedido');
+      // Toca "Confirmar Pedido (Guardar en SQLite)" con campos vacíos para mostrar las validaciones.
+      final boton = find.text('Confirmar Pedido (Guardar en SQLite)');
       if (boton.evaluate().isNotEmpty) {
         await t.ensureVisible(boton);
         await t.pump();

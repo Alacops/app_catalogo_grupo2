@@ -21,6 +21,7 @@ class CarritoProvider extends ChangeNotifier {
   }
 
   List<ItemCarrito> get lineas => _items.values.toList();
+  List<ItemCarrito> get items => lineas;
   bool get vacio => _items.isEmpty;
 
   /// Cantidad total de unidades (para el badge).
@@ -30,9 +31,15 @@ class CarritoProvider extends ChangeNotifier {
   /// Importe total del carrito.
   double get total =>
       _items.values.fold(0.0, (suma, item) => suma + item.subtotal);
+  double get subtotal => total;
+  double get costoEnvio => 5.0;
+  double get descuentoMonto => 0.0;
 
   bool estaEnCarrito(String id) => _items.containsKey(id);
   int cantidadDe(String id) => _items[id]?.cantidad ?? 0;
+
+  void agregarProducto(Producto p) => agregar(p);
+  void vaciarCarrito() => vaciar();
 
   /// Agrega un producto (o incrementa si ya estaba).
   void agregar(Producto producto) {

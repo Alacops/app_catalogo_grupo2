@@ -26,6 +26,19 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
   String _categoria = 'Todos';
   String _busqueda = '';
   final TextEditingController _buscadorCtrl = TextEditingController();
+  final ScrollController _scrollCtrl = ScrollController();
+  bool _mostrarBotonSubir = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollCtrl.addListener(() {
+      final mostrar = _scrollCtrl.offset > 250;
+      if (mostrar != _mostrarBotonSubir) {
+        setState(() => _mostrarBotonSubir = mostrar);
+      }
+    });
+  }
 
   /// Productos que cumplen el filtro de categoría y el texto de búsqueda.
   List<Producto> get _filtrados {
@@ -43,6 +56,7 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
   @override
   void dispose() {
     _buscadorCtrl.dispose();
+    _scrollCtrl.dispose();
     super.dispose();
   }
 
@@ -66,8 +80,36 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
                 style: TextStyle(fontSize: 11, color: Colors.white70)),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.receipt_long_rounded),
+            tooltip: 'Historial de Pedidos (SQLite)',
+            onPressed: () => Navigator.of(context).pushNamed('/pedidos'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Ajustes y Configuración',
+            onPressed: () => Navigator.of(context).pushNamed('/ajustes'),
+          ),
+        ],
       ),
+      floatingActionButton: _mostrarBotonSubir
+          ? FloatingActionButton.small(
+              backgroundColor: const Color(0xFF7A1F2B),
+              foregroundColor: Colors.white,
+              tooltip: 'Volver arriba',
+              onPressed: () {
+                _scrollCtrl.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                );
+              },
+              child: const Icon(Icons.arrow_upward),
+            )
+          : null,
       body: SingleChildScrollView(
+        controller: _scrollCtrl,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

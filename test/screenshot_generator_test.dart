@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_catalogo_grupo2/providers/carrito_provider.dart';
 import 'package:app_catalogo_grupo2/providers/favoritos_provider.dart';
 import 'package:app_catalogo_grupo2/screens/catalogo_screen.dart';
+import 'package:app_catalogo_grupo2/services/preferencias_service.dart';
 
 /// Carpeta de salida de las capturas (relativa a la raíz del proyecto):
 /// informe/capturas/
@@ -130,6 +131,7 @@ void main() {
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
+    await PreferenciasService.inicializar();
     await _cargarFuentesCompletas();
   });
 

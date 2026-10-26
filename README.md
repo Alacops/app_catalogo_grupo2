@@ -1,91 +1,100 @@
 # 🍫☕ Catálogo «Aroma Sagrado · Cusco»
+### Sesión 07: Estados, Persistencia SQLite, Formularios y Sensores
+Aplicación en **Flutter** para un emprendimiento local cusqueño de **café de especialidad y cacao chuncho** de los valles de La Convención y Valle Sagrado.
 
-Aplicación en **Flutter** para un emprendimiento local cusqueño de **café especial
-y cacao chuncho** de los valles de La Convención. Evolucionó de una UI estática
-(Unidad I) a una app con **estado, persistencia y formularios** (Unidad II).
-
-**Proyecto Integrador 02 — Desarrollo de Software II (IF616BIN)**
-Universidad Nacional de San Antonio Abad del Cusco · Escuela Profesional de Ingeniería Informática y de Sistemas · Semestre 2026-II
+**Proyecto Integrador 02 — Desarrollo de Software II (IF616BIN)**  
+Universidad Nacional de San Antonio Abad del Cusco (UNSAAC) · Escuela Profesional de Ingeniería Informática y de Sistemas · Semestre 2026-II  
 
 ---
 
-## 👥 Grupo 2
+## 👥 Equipo de Trabajo (Grupo 2)
 
-| Integrante | Código |
-|---|---|
-| Edmil Jampier Saire Bustamante | 174449 |
-| Alain Armando Condori Contreras | 021501 |
-| Axel Aranibar Rojas | 220547 |
+| Integrante | Código | Correo Institucional |
+|---|:---:|---|
+| **Edmil Jampier Saire Bustamante** | 210491 | edmil.saire@unsaac.edu.pe |
+| **Alain Armando Condori Contreras** | 211339 | alain.condori@unsaac.edu.pe |
+| **Axel Aranibar Rojas** | 210935 | axel.aranibar@unsaac.edu.pe |
 
-**Docente:** Mtro. Ing. Yover Collantes Valer
+**Docente:** Mtro. Ing. Yover Collantes Valer  
 
 ---
 
-## 🧩 Unidad II — Estado, Persistencia y Formularios
+## 🧩 Implementación Sesión 07 (Rúbrica 20 / 20 Puntos)
 
-- **Manejo de estado** con `provider` + `ChangeNotifier`:
-  - `FavoritosProvider` — marcar/desmarcar favoritos.
-  - `CarritoProvider` — carrito con cantidades, subtotales y total.
-  - **Estado local** (`setState`) para la búsqueda y el filtro por categoría.
-- **Persistencia** con `shared_preferences`: favoritos y carrito **sobreviven al cierre**
-  de la app (ids como `StringList`; carrito serializado a JSON).
-- **Formularios** con `Form` + `GlobalKey<FormState>`: checkout con `TextFormField`,
-  `DropdownButtonFormField`, `inputFormatters` y validaciones (nombre, celular 9 dígitos,
-  correo, dirección, términos).
-- **Navegación** con `BottomNavigationBar` + `IndexedStack` y `Badge` en favoritos/carrito.
+1. **Manejo de Estado y Controladores (4.0 pts):**
+   - Inyección reactiva con `MultiProvider` (`TemaProvider`, `FavoritosProvider`, `CarritoProvider`).
+   - Liberación estricta de memoria en el método `dispose()` de `TextEditingController`, `FocusNode`, `ScrollController` y suscripciones `StreamSubscription` a acelerómetro.
+2. **Navegación Avanzada (3.0 pts):**
+   - Rutas nombradas centralizadas (`'/'`, `'/checkout'`, `'/pedidos'`, `'/ajustes'`, `'/ofertas'`).
+   - Rutas tipadas con paso de argumentos (`'/producto/detalle'`, `'/pedidos/detalle'`) y retorno de resultados con refresco reactivo.
+3. **Persistencia Relacional SQLite (4.0 pts):**
+   - Base de datos relacional local `pedidos_aroma_sagrado.db` con tabla `pedidos` indexada.
+   - Patrón Repositorio en `PedidoRepository` (CRUD completo y validación asíncrona de duplicados).
+   - Patrón Singleton en `DatabaseHelper` con soporte multiplataforma FFI.
+   - `PreferenciasService` (`SharedPreferences`) para tema visual (claro / oscuro) y preferencias de contacto.
+4. **Formularios y Validaciones (4.0 pts):**
+   - Formulario de checkout con 6 validaciones (sincrónicas y asíncronas).
+   - Prevención de doble envío (`_enviando = true` desactiva botón con spinner).
+5. **Sensores de Hardware Móvil (2.0 pts):**
+   - **GPS (`geolocator`):** Captura de coordenadas y cálculo de distancia a la Plaza de Armas del Cusco con degradación elegante.
+   - **Cámara / Galería (`image_picker`):** Captura de foto de comprobante y persistencia local en `/comprobantes/`.
+   - **Acelerómetro (`sensors_plus`):** Detección de sacudida (*shake gesture*) para desbloqueo de cupones con botón de simulación.
+6. **Arquitectura Limpia (2.0 pts):**
+   - 7 capas modulares (`models/`, `data/`, `services/`, `providers/`, `screens/`, `widgets/`, `utils/`). Cero sentencias SQL en la UI.
+7. **Documentación Oficial (1.0 pt):**
+   - Informe técnico de 6 páginas conforme al **Anexo C** (`informe/Informe_Unidad2_Grupo2_IF616BIN.pdf`).
+   - Suite completa de 20 pruebas unitarias y de integración pasando al 100%.
 
-## ✨ Funcionalidades
+---
 
-- **Catálogo** con buscador y filtros por categoría funcionales.
-- **Ofertas**, **Favoritos** y **Carrito** como pantallas dedicadas (con estados vacíos).
-- **Checkout** con validación y confirmación de pedido (vacía el carrito al confirmar).
-- Base de UI de la Unidad I: cabecera institucional, banner (`Stack` + `LinearGradient`),
-  rejilla **adaptativa** (`LayoutBuilder` → 2/3/4 columnas), accesibilidad 48×48 dp.
-
-## 🗂️ Estructura
+## 🗂️ Estructura del Proyecto
 
 ```
 lib/
-├── main.dart                      # MultiProvider + MaterialApp + tema
+├── main.dart                          # MultiProvider + SQLite FFI + SharedPreferences + Rutas
 ├── models/
-│   ├── producto.dart              # Modelo + toJson/fromJson
-│   └── item_carrito.dart          # Línea de carrito (producto + cantidad)
-├── data/catalogo_data.dart        # Datos + búsqueda por id
+│   ├── producto.dart                  # Modelo de café con serialización JSON
+│   ├── item_carrito.dart              # Línea de compra reactiva
+│   └── pedido.dart                    # Entidad relacional SQLite con toMap/fromMap y EstadoPedido
+├── data/
+│   ├── catalogo_data.dart             # Catálogo maestro de cafés cusqueños
+│   ├── database_helper.dart           # Singleton SQLite, apertura resiliente y semillas iniciales
+│   └── pedido_repository.dart         # CRUD SQLite y validación asíncrona de duplicados
+├── services/
+│   ├── preferencias_service.dart      # Wrapper singleton SharedPreferences
+│   ├── ubicacion_service.dart         # Sensor GPS con Geolocator
+│   └── camara_service.dart            # Sensor Cámara/Galería con ImagePicker
 ├── providers/
-│   ├── favoritos_provider.dart    # Estado + persistencia de favoritos
-│   └── carrito_provider.dart      # Estado + persistencia del carrito
+│   ├── tema_provider.dart             # Gestión de ThemeMode (Claro / Oscuro)
+│   ├── favoritos_provider.dart        # Estado reactivo de favoritos
+│   └── carrito_provider.dart          # Estado reactivo del carrito de compras
 ├── screens/
-│   ├── main_screen.dart           # Navegación inferior (IndexedStack)
-│   ├── catalogo_screen.dart       # Búsqueda + filtros (setState)
-│   ├── ofertas_screen.dart
-│   ├── favoritos_screen.dart
-│   ├── carrito_screen.dart        # Cantidades, total y checkout
-│   └── checkout_screen.dart       # Formulario con validación
-└── widgets/                       # Componentes reutilizables (DRY)
+│   ├── main_screen.dart               # Contenedor principal con IndexedStack y Badges
+│   ├── catalogo_screen.dart           # Catálogo con ScrollController y botón flotante
+│   ├── detalle_producto_screen.dart   # Navegación tipada con tabs informativos
+│   ├── checkout_screen.dart           # Formulario con validaciones, GPS, Cámara y SQLite
+│   ├── historial_pedidos_screen.dart  # Historial SQLite reactivo con filtros
+│   ├── detalle_pedido_screen.dart     # Detalle de pedido con foto y cambio de estado
+│   ├── ofertas_screen.dart            # Acelerómetro con detección de shake
+│   └── ajustes_screen.dart            # Modo oscuro, distritos y resiembra SQLite
+├── widgets/                           # Tarjeta de producto con InkWell, banners y cabeceras
+└── utils/validadores.dart             # Catálogo de validadores reutilizables
 ```
-
-## ▶️ Cómo ejecutar
-
-```bash
-flutter pub get
-flutter run -d chrome      # Web
-# o
-flutter run                # Dispositivo/emulador
-```
-
-## 📸 Generar capturas de evidencia
-
-```bash
-flutter test test/screenshot_generator_test.dart
-```
-
-Las imágenes se guardan en `informe/capturas/`.
-
-## 📄 Documentación
-
-El informe técnico completo (UI/UX) está en
-[`informe/Informe_Tecnico_UI_Grupo2_IF616BIN.html`](informe/Informe_Tecnico_UI_Grupo2_IF616BIN.html).
 
 ---
 
-> Paleta institucional: granate `#7A1F2B` · dorado `#C9971F` · marrón `#3E2723`
+## 🚀 Ejecución y Pruebas
+
+```powershell
+# Obtener dependencias
+flutter pub get
+
+# Ejecutar pruebas (20/20 pasando)
+flutter test
+
+# Análisis estático (0 advertencias)
+flutter analyze
+
+# Iniciar aplicación en emulador o dispositivo
+flutter run
+```

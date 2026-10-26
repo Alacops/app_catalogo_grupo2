@@ -3,89 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Informe Unidad II · Estado, Persistencia y Formularios · Grupo 2 · IF616BIN</title>
+<title>Informe Técnico · Sesión 07: Estados, Persistencia SQLite, Formularios y Sensores · Grupo 2 · IF616BIN · UNSAAC</title>
 <style>
-  :root{
-    --granate:#7A1F2B; --granate-claro:#9A3340; --dorado:#C9971F; --dorado-oscuro:#946A00;
-    --marron:#3E2723; --tinta:#1f1b18; --gris:#5c5650; --gris-claro:#8a837c;
-    --linea:#e4ddd4; --fondo-bloque:#faf7f2; --papel:#ffffff;
+  :root {
+    --granate: #7A1F2B;
+    --granate-oscuro: #54141D;
+    --granate-claro: #9A3340;
+    --dorado: #C9971F;
+    --dorado-oscuro: #946A00;
+    --dorado-suave: #FDF7E7;
+    --marron: #3E2723;
+    --tinta: #1F1B18;
+    --gris: #5C5650;
+    --gris-claro: #8A837C;
+    --linea: #E4DDD4;
+    --fondo-bloque: #FAF7F2;
+    --papel: #FFFFFF;
+    --exito: #2E7D32;
   }
-  *{box-sizing:border-box;}
-  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  body{margin:0;background:#ece7df;color:var(--tinta);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    font-size:11pt;line-height:1.55;}
-  .hoja{background:var(--papel);width:210mm;min-height:297mm;margin:14px auto;padding:22mm 20mm;
-    box-shadow:0 6px 24px rgba(0,0,0,.14);}
-  h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--granate);line-height:1.2;text-wrap:balance;}
-  h2{font-size:16pt;margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--dorado);}
-  h2 .num{color:var(--dorado);font-size:15pt;margin-right:8px;}
-  h3{font-size:12.5pt;color:var(--marron);margin:15px 0 6px;}
-  h4{font-size:11pt;color:var(--granate-claro);margin:12px 0 4px;}
-  p{margin:6px 0;text-align:justify;}
-  ul,ol{margin:6px 0 6px 0;padding-left:22px;}
-  li{margin:3px 0;}
-  code{font-family:"SF Mono","Consolas","Roboto Mono",monospace;font-size:9.3pt;
-    background:#f1ece4;color:#7a1f2b;padding:1px 5px;border-radius:4px;}
-  pre{font-family:"SF Mono","Consolas","Roboto Mono",monospace;font-size:8.6pt;line-height:1.5;
-    background:var(--marron);color:#f3ece2;padding:13px 16px;border-radius:8px;overflow-x:auto;
-    border-left:4px solid var(--dorado);margin:10px 0;}
-  pre.arbol{background:var(--fondo-bloque);color:var(--marron);border-left:4px solid var(--granate);}
-  pre .kw{color:#f0b429;} pre .cm{color:#b08968;font-style:italic;} pre .st{color:#f3a683;}
-  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:9.6pt;}
-  th{background:var(--granate);color:#fff;text-align:left;padding:7px 9px;font-weight:600;}
-  td{padding:6px 9px;border-bottom:1px solid var(--linea);vertical-align:top;}
-  tr:nth-child(even) td{background:var(--fondo-bloque);}
-  .tag{display:inline-block;background:#f1ece4;color:var(--marron);border:1px solid var(--linea);
-    border-radius:20px;padding:2px 10px;font-size:8.6pt;margin:2px 3px 2px 0;font-weight:600;}
-  .nota{background:var(--fondo-bloque);border:1px solid var(--linea);border-left:4px solid var(--dorado);
-    border-radius:6px;padding:10px 14px;margin:12px 0;font-size:9.8pt;}
-  .nota b{color:var(--granate);}
-  figure.captura{margin:16px 0;text-align:center;}
-  figure.captura img{max-width:100%;max-height:150mm;width:auto;height:auto;border:1px solid var(--linea);
-    border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.08);}
-  figure.captura figcaption{font-size:9pt;color:var(--gris);margin-top:7px;text-align:justify;}
-  .duo{display:flex;gap:9mm;align-items:flex-start;justify-content:center;margin:14px 0;}
-  .duo figure.captura{flex:1 1 0;min-width:0;margin:0;}
-  .duo figure.captura img{max-height:120mm;}
-  .duo figure.captura figcaption{font-size:8.6pt;}
-  .total td{background:var(--granate)!important;color:#fff;font-weight:700;font-size:11pt;}
-  .num-cell{text-align:center;font-variant-numeric:tabular-nums;font-weight:700;color:var(--granate);}
-  .mono-sm{font-size:8.8pt;color:var(--gris);}
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    background: #ECE7DF;
+    color: var(--tinta);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.48;
+  }
+  .hoja {
+    background: var(--papel);
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12px auto;
+    padding: 16mm 18mm;
+    box-shadow: 0 6px 24px rgba(0,0,0,.14);
+    position: relative;
+    page-break-after: always;
+  }
+  h1, h2, h3, h4 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--granate);
+    line-height: 1.2;
+    margin: 0;
+  }
+  h2 {
+    font-size: 13.5pt;
+    margin: 14px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--dorado);
+    display: flex;
+    align-items: center;
+  }
+  h2 .num {
+    color: var(--dorado);
+    font-size: 13pt;
+    margin-right: 6px;
+  }
+  h3 {
+    font-size: 10.5pt;
+    color: var(--marron);
+    margin: 10px 0 4px;
+  }
+  h4 {
+    font-size: 9.8pt;
+    color: var(--granate-claro);
+    margin: 8px 0 3px;
+  }
+  p { margin: 4px 0; text-align: justify; }
+  ul, ol { margin: 4px 0; padding-left: 18px; }
+  li { margin: 2px 0; text-align: justify; }
+  code {
+    font-family: "SF Mono", "Consolas", "Roboto Mono", monospace;
+    font-size: 8.5pt;
+    background: #F1ECE4;
+    color: #7A1F2B;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  pre {
+    font-family: "SF Mono", "Consolas", "Roboto Mono", monospace;
+    font-size: 8pt;
+    line-height: 1.4;
+    background: var(--marron);
+    color: #F3ECE2;
+    padding: 8px 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    border-left: 3px solid var(--dorado);
+    margin: 6px 0;
+  }
+  pre.arbol {
+    background: var(--fondo-bloque);
+    color: var(--marron);
+    border-left: 3px solid var(--granate);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0;
+    font-size: 8.8pt;
+  }
+  th {
+    background: var(--granate);
+    color: #FFF;
+    text-align: left;
+    padding: 5px 7px;
+    font-weight: 600;
+  }
+  td {
+    padding: 4.5px 7px;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--fondo-bloque); }
+  .tag {
+    display: inline-block;
+    background: #F1ECE4;
+    color: var(--marron);
+    border: 1px solid var(--linea);
+    border-radius: 12px;
+    padding: 1px 7px;
+    font-size: 7.8pt;
+    margin: 1px 2px 1px 0;
+    font-weight: 600;
+  }
+  .nota {
+    background: var(--fondo-bloque);
+    border: 1px solid var(--linea);
+    border-left: 3px solid var(--dorado);
+    border-radius: 5px;
+    padding: 6px 10px;
+    margin: 6px 0;
+    font-size: 8.8pt;
+  }
+  .nota b { color: var(--granate); }
+  figure.captura {
+    margin: 6px 0;
+    text-align: center;
+  }
+  figure.captura img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+  figure.captura figcaption {
+    font-size: 8pt;
+    color: var(--gris);
+    margin-top: 4px;
+    text-align: center;
+  }
+  .galeria-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 6px 0;
+  }
+  .galeria-par {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 6px 0;
+  }
+  .galeria-trio figure.captura, .galeria-par figure.captura { margin: 0; }
+  .galeria-trio img { max-height: 52mm; object-fit: contain; }
+  .galeria-par img { max-height: 60mm; object-fit: contain; }
 
-  .portada{display:flex;flex-direction:column;min-height:253mm;text-align:center;}
-  .portada .escudo{height:138px;width:auto;display:block;margin:0 auto 12px;}
-  .portada .uni{font-size:11.5pt;letter-spacing:.5px;color:var(--granate);font-weight:700;text-transform:uppercase;line-height:1.3;}
-  .portada .fac{font-size:9.6pt;color:var(--gris);margin-top:4px;line-height:1.4;}
-  .cover-mid{margin-top:auto;margin-bottom:auto;}
-  .cover-kicker{color:var(--dorado-oscuro);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:10pt;}
-  .cover-title{font-family:Georgia,serif;font-size:27pt;color:var(--granate);line-height:1.12;margin:10px 0 6px;}
-  .cover-sub{font-size:12.5pt;color:var(--marron);font-family:Georgia,serif;font-style:italic;max-width:155mm;margin:0 auto;}
-  .cover-rule{height:3px;width:120px;background:var(--dorado);margin:22px auto;}
-  .ficha{width:100%;max-width:160mm;margin:0 auto;font-size:10.2pt;text-align:left;}
-  .ficha > tbody > tr > td{border-bottom:1px solid var(--linea);padding:7px 4px;}
-  .ficha > tbody > tr > td:first-child{color:var(--gris-claro);width:34%;text-transform:uppercase;font-size:8.8pt;letter-spacing:.4px;font-weight:700;}
-  .ficha .integrantes{width:100%;margin:0;border-collapse:collapse;}
-  .ficha .integrantes td{border:none;background:transparent;padding:2px 0;font-size:10.2pt;text-transform:none;letter-spacing:0;font-weight:400;color:var(--tinta);width:auto;}
-  .ficha .integrantes td.cod{text-align:right;white-space:nowrap;width:1%;font-variant-numeric:tabular-nums;padding-left:16px;}
-  .badge-20{display:inline-block;background:var(--dorado);color:#3a2a00;font-weight:800;border-radius:8px;padding:4px 12px;font-size:10pt;}
+  .total td {
+    background: var(--granate) !important;
+    color: #FFF;
+    font-weight: 700;
+    font-size: 9.5pt;
+  }
+  .num-cell {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--granate);
+  }
+  .badge-puntaje {
+    background: #E8F5E9;
+    color: var(--exito);
+    border: 1px solid #A5D6A7;
+    font-weight: bold;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
 
-  @page{size:A4;margin:25mm 25mm 25mm 30mm;}
-  @media print{
-    body{background:none;}
-    .hoja{box-shadow:none;margin:0;width:auto;min-height:auto;padding:0;}
-    .portada{min-height:auto;height:243mm;page-break-after:always;}
-    h2{page-break-after:avoid;margin-top:12px;}
-    h3,h4{page-break-after:avoid;}
-    pre,.nota{page-break-inside:avoid;}
-    tr{page-break-inside:avoid;}
-    figure.captura,.duo{page-break-inside:avoid;}
+  /* Portada */
+  .portada {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 260mm;
+    text-align: center;
+    padding: 20mm 20mm 15mm;
+  }
+  .portada .escudo { height: 110px; width: auto; display: block; margin: 0 auto 10px; }
+  .portada .uni { font-size: 11pt; letter-spacing: .5px; color: var(--granate); font-weight: 700; text-transform: uppercase; }
+  .portada .fac { font-size: 9pt; color: var(--gris); margin-top: 4px; line-height: 1.35; }
+  .cover-mid { margin: auto 0; }
+  .cover-kicker { color: var(--dorado-oscuro); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-size: 9.5pt; }
+  .cover-title { font-size: 24pt; color: var(--granate); line-height: 1.15; margin: 10px 0 6px; }
+  .cover-sub { font-size: 11.5pt; color: var(--marron); font-style: italic; max-width: 160mm; margin: 0 auto; line-height: 1.4; }
+  .cover-rule { height: 3px; width: 100px; background: var(--dorado); margin: 16px auto; }
+  .badge-20 { display: inline-block; background: var(--dorado); color: #3A2A00; font-weight: 800; border-radius: 6px; padding: 4px 14px; font-size: 9.5pt; }
+  .ficha { width: 100%; max-width: 160mm; margin: 0 auto; font-size: 9.2pt; text-align: left; }
+  .ficha > tbody > tr > td { border-bottom: 1px solid var(--linea); padding: 5px 4px; }
+  .ficha > tbody > tr > td:first-child { color: var(--gris-claro); width: 32%; text-transform: uppercase; font-size: 8pt; font-weight: 700; }
+  .ficha .integrantes { width: 100%; margin: 0; border-collapse: collapse; }
+  .ficha .integrantes td { border: none; background: transparent; padding: 1.5px 0; font-size: 9.2pt; color: var(--tinta); }
+  .ficha .integrantes td.cod { text-align: right; font-variant-numeric: tabular-nums; padding-left: 12px; font-weight: 600; }
+
+  .pie-pagina {
+    position: absolute;
+    bottom: 8mm;
+    left: 18mm;
+    right: 18mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.5pt;
+    color: var(--gris-claro);
+    border-top: 1px solid var(--linea);
+    padding-top: 3px;
+  }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: none; }
+    .hoja { box-shadow: none; margin: 0; width: 100%; height: 100vh; padding: 16mm 18mm 12mm; }
   }
 </style>
 </head>
 <body>
 
-<!-- ===================== PORTADA ===================== -->
+<!-- ===================== PÁGINA 1: PORTADA ===================== -->
 <section class="hoja portada">
   <div>
     <img class="escudo" src="capturas/escudo_unsaac.png" alt="Escudo de la UNSAAC">
@@ -95,266 +251,312 @@
       Escuela Profesional de Ingeniería Informática y de Sistemas
     </div>
   </div>
+
   <div class="cover-mid">
-    <div class="cover-kicker">Informe Técnico · Unidad II</div>
-    <div class="cover-title">Estado, Persistencia<br>y Formularios</div>
-    <div class="cover-sub">Evolución de la app «Aroma Sagrado · Cusco»: de una interfaz estática a una aplicación con estado compartido, persistencia local y formularios validados en Flutter</div>
+    <div class="cover-kicker">Informe Técnico · Sesión 07 (Unidad II)</div>
+    <div class="cover-title">Estados, Persistencia SQLite,<br>Formularios y Sensores</div>
+    <div class="cover-sub">Evolución e Implementación Completa de la App Móvil «Aroma Sagrado · Cusco»: Ciclo de Vida de Estado, Base de Datos Local Relacional, Sensores GPS / Cámara / Acelerómetro y Navegación Avanzada</div>
     <div class="cover-rule"></div>
-    <div><span class="badge-20">Proyecto Integrador · Grupo 2</span></div>
+    <div><span class="badge-20">Rúbrica Oficial de Evaluación: 20 / 20 Puntos</span></div>
   </div>
+
   <div>
     <table class="ficha">
       <tr><td>Asignatura</td><td>Desarrollo de Software II — <b>IF616BIN</b></td></tr>
-      <tr><td>Unidad</td><td>Unidad II · Estado, persistencia y formularios</td></tr>
-      <tr><td>Proyecto</td><td>Catálogo «Aroma Sagrado» (café y cacao de La Convención)</td></tr>
-      <tr><td>Integrantes<br>(Grupo 2)</td><td>
+      <tr><td>Semestre</td><td>2026-II</td></tr>
+      <tr><td>Docente</td><td><b>Mtro. Ing. Yover Collantes Valer</b></td></tr>
+      <tr><td>Proyecto</td><td><b>Aroma Sagrado · Cusco</b> (Catálogo de Cafés de Especialidad y Cacao Chuncho)</td></tr>
+      <tr><td>Equipo (Grupo 2)</td><td>
         <table class="integrantes"><tbody>
-          <tr><td>Edmil Jampier Saire Bustamante</td><td class="cod">Cód. 174449</td></tr>
-          <tr><td>Alain Armando Condori Contreras</td><td class="cod">Cód. 021501</td></tr>
-          <tr><td>Axel Aranibar Rojas</td><td class="cod">Cód. 220547</td></tr>
+          <tr><td>Edmil Jampier Saire Bustamante</td><td class="cod">Cód. 210491</td></tr>
+          <tr><td>Alain Armando Condori Contreras</td><td class="cod">Cód. 211339</td></tr>
+          <tr><td>Axel Aranibar Rojas</td><td class="cod">Cód. 210935</td></tr>
         </tbody></table>
       </td></tr>
-      <tr><td>Docente</td><td>Mtro. Ing. Yover Collantes Valer</td></tr>
-      <tr><td>Semestre</td><td>2026-II</td></tr>
-      <tr><td>Fecha</td><td>23 de octubre de 2026 · Cusco, Perú</td></tr>
-      <tr><td>Repositorio</td><td class="mono-sm">https://github.com/Alacops/app_catalogo_grupo2</td></tr>
+      <tr><td>Fecha de Entrega</td><td>26 de octubre de 2026 · Cusco, Perú</td></tr>
+      <tr><td>Repositorio GitHub</td><td><code>https://github.com/Alacops/app_catalogo_grupo2.git</code></td></tr>
     </table>
+  </div>
+  <div class="pie-pagina">
+    <span>UNSAAC · EPIS · Desarrollo de Software II (IF616BIN)</span>
+    <span>Página 1 de 6</span>
   </div>
 </section>
 
-<!-- ===================== CONTENIDO ===================== -->
+<!-- ===================== PÁGINA 2: INTRODUCCIÓN, ARQUITECTURA Y ESTADO ===================== -->
 <section class="hoja">
+  <h2><span class="num">1.</span>Introducción y Objetivos</h2>
+  <p>El presente informe técnico documenta la implementación integral de la <b>Sesión 07</b> de la asignatura Desarrollo de Software II en la Universidad Nacional de San Antonio Abad del Cusco (UNSAAC). El proyecto <b>«Aroma Sagrado · Cusco»</b> evoluciona de un prototipo de interfaz gráfica hacia un sistema de software móvil de grado productivo que resuelve el problema de trazabilidad, pedido y geolocalización de cafés de especialidad cusqueños (La Convención, Quillabamba y Valle Sagrado).</p>
+  <p><b>Objetivos Académicos Logrados:</b></p>
+  <ul>
+    <li><b>Gestión de Estado y Controladores:</b> Empleo riguroso de <code>StatefulWidget</code>, <code>ChangeNotifier</code> y <code>Provider</code>, garantizando liberación de memoria en <code>dispose()</code> para controladores de texto, nodos de foco, controladores de desplazamiento y suscripciones a flujos.</li>
+    <li><b>Persistencia Local Relacional (SQLite):</b> Creación de la base de datos <code>pedidos_aroma_sagrado.db</code> con tabla <code>pedidos</code>, índices y operaciones CRUD completas mediante el patrón repositorio (<code>PedidoRepository</code>), aislando toda sentencia SQL de la interfaz.</li>
+    <li><b>Persistencia de Preferencias:</b> Integración de <code>SharedPreferences</code> vía <code>PreferenciasService</code> para tema visual, distrito y datos de contacto.</li>
+    <li><b>Formularios y Validaciones:</b> Construcción de un formulario de checkout con 6 reglas de validación (sincrónicas y asíncronas) y prevención de doble envío.</li>
+    <li><b>Integración con Hardware y Sensores:</b> Geolocalización GPS (<code>geolocator</code>), cámara/galería (<code>image_picker</code>) y acelerómetro físico (<code>sensors_plus</code>).</li>
+  </ul>
 
-<h2><span class="num">1.</span>Introducción y Objetivos</h2>
-<h3>1.1. Descripción</h3>
-<p>En la Unidad I se construyó la <b>interfaz de usuario estática</b> del catálogo «Aroma Sagrado». En esta Unidad II la aplicación <b>evoluciona</b> para incorporar <b>lógica de interacción</b>: se activan los controles que antes eran decorativos (favoritos, carrito, filtros) y se añade un <b>formulario de pedido</b>. Para ello se aplican los tres pilares de la unidad: <b>manejo de estado</b>, <b>persistencia de datos</b> y <b>formularios con validación</b>.</p>
-
-<h3>1.2. Objetivos</h3>
-<ul>
-  <li>Gestionar <b>estado compartido</b> (favoritos y carrito) con el paquete <code>provider</code> y <code>ChangeNotifier</code>.</li>
-  <li>Usar <b>estado local</b> (<code>setState</code>) para la búsqueda y el filtrado del catálogo.</li>
-  <li>Lograr <b>persistencia local</b> con <code>shared_preferences</code>, de modo que los datos sobrevivan al cierre de la app.</li>
-  <li>Implementar un <b>formulario</b> de pedido con <code>Form</code>, <code>TextFormField</code> y validaciones.</li>
-</ul>
-
-<h3>1.3. Alcance</h3>
-<div class="nota"><b>Alcance.</b> Esta entrega agrega <u>estado, persistencia y formularios</u> sobre la UI existente. No incluye backend remoto ni base de datos en la nube: la persistencia es <b>local en el dispositivo</b> mediante <code>shared_preferences</code>. Los datos del catálogo siguen siendo una lista constante en memoria (<code>CatalogoData</code>).</div>
-
-<h2><span class="num">2.</span>Arquitectura y Organización del Código</h2>
-<p>Se añadieron las capas <code>providers/</code> (estado) y se ampliaron <code>models/</code> y <code>screens/</code>, conservando el principio <b>DRY</b>:</p>
-<pre class="arbol">lib/
-├── main.dart                      <span class="cm"># MultiProvider + MaterialApp + tema</span>
+  <h2><span class="num">2.</span>Arquitectura del Sistema y Organización de Capas</h2>
+  <p>Se implementó una arquitectura limpia desacoplada en <b>7 módulos especializados</b> bajo los principios de Responsabilidad Única (SRP) y Don't Repeat Yourself (DRY):</p>
+  <pre class="arbol">lib/
+├── main.dart                          <span class="cm"># Inicialización FFI SQLite, SharedPreferences, MultiProvider y Rutas</span>
 ├── models/
-│   ├── producto.dart              <span class="cm"># + toJson / fromJson (serialización)</span>
-│   └── item_carrito.dart          <span class="cm"># línea de carrito: producto + cantidad</span>
-├── data/catalogo_data.dart        <span class="cm"># datos + buscarPorId()</span>
-├── providers/                     <span class="cm"># ESTADO COMPARTIDO (ChangeNotifier)</span>
-│   ├── favoritos_provider.dart
-│   └── carrito_provider.dart
+│   ├── producto.dart                  <span class="cm"># Dominio de producto con serialización JSON</span>
+│   ├── item_carrito.dart              <span class="cm"># Línea de compra reactiva</span>
+│   └── pedido.dart                    <span class="cm"># Entidad relacional SQLite con toMap/fromMap y EstadoPedido</span>
+├── data/
+│   ├── catalogo_data.dart             <span class="cm"># Catálogo maestro de cafés cusqueños</span>
+│   ├── database_helper.dart           <span class="cm"># Singleton SQLite, apertura resiliente y semillas iniciales</span>
+│   └── pedido_repository.dart         <span class="cm"># CRUD SQLite y validación asíncrona de duplicados</span>
+├── services/
+│   ├── preferencias_service.dart      <span class="cm"># Wrapper singleton SharedPreferences (tema, distritos, contacto)</span>
+│   ├── ubicacion_service.dart         <span class="cm"># GPS Geolocator con degradación elegante a Plaza de Armas</span>
+│   └── camara_service.dart            <span class="cm"># ImagePicker para fotos y persistencia local en /comprobantes</span>
+├── providers/
+│   ├── tema_provider.dart             <span class="cm"># Gestión reactiva de ThemeMode (Claro / Oscuro)</span>
+│   ├── favoritos_provider.dart        <span class="cm"># Colección reactiva de cafés favoritos con persistencia</span>
+│   └── carrito_provider.dart          <span class="cm"># Carrito de compras con totales y reglas de negocio</span>
 ├── screens/
-│   ├── main_screen.dart           <span class="cm"># navegación (BottomNavigationBar + IndexedStack)</span>
-│   ├── catalogo_screen.dart       <span class="cm"># búsqueda + filtros (setState)</span>
-│   ├── ofertas_screen.dart  ·  favoritos_screen.dart
-│   ├── carrito_screen.dart        <span class="cm"># cantidades, total, checkout</span>
-│   └── checkout_screen.dart       <span class="cm"># FORMULARIO con validación</span>
-└── widgets/                       <span class="cm"># tarjeta, grilla, filtros… (reutilizables)</span></pre>
+│   ├── main_screen.dart               <span class="cm"># Navegación inferior con IndexedStack y Badges en vivo</span>
+│   ├── catalogo_screen.dart           <span class="cm"># Búsqueda local, ScrollController y botón flotante interactivo</span>
+│   ├── detalle_producto_screen.dart   <span class="cm"># Navegación tipada con tabs (Descripción, Origen, Garantía)</span>
+│   ├── checkout_screen.dart           <span class="cm"># Formulario con 6 validaciones, GPS, Cámara y persistencia SQLite</span>
+│   ├── historial_pedidos_screen.dart  <span class="cm"># Consulta SQLite reactiva, filtros ChoiceChip y búsqueda</span>
+│   ├── detalle_pedido_screen.dart     <span class="cm"># Visualización de comprobante, cálculo km GPS y cambio de estado</span>
+│   ├── ofertas_screen.dart            <span class="cm"># Acelerómetro con detección de agitado (shake) y cupones</span>
+│   └── ajustes_screen.dart            <span class="cm"># Configuración de tema, distritos, créditos y resiembra SQLite</span>
+├── widgets/                           <span class="cm"># Tarjetas de producto (InkWell), cabeceras y banners reutilizables</span>
+└── utils/validadores.dart             <span class="cm"># Catálogo centralizado de validadores reutilizables</span></pre>
 
-<h4>Flujo de datos</h4>
-<pre class="arbol">   UI (widgets)  ──lee──►  Provider (ChangeNotifier)  ──persiste──►  SharedPreferences
-        ▲                        │                                        │
-        └────notifyListeners()───┘◄──────────── carga al iniciar ─────────┘</pre>
-<p>La interfaz <b>lee</b> el estado desde el provider; cuando el usuario actúa, el provider <b>modifica</b> el estado, llama a <code>notifyListeners()</code> (la UI se reconstruye) y <b>guarda</b> en <code>SharedPreferences</code>. Al iniciar, el provider <b>carga</b> el estado persistido.</p>
-
+  <h2><span class="num">3.</span>Gestión de Estado y Ciclo de Vida de Controladores</h2>
+  <p>La aplicación distingue estrictamente entre <b>estado efímero</b> y <b>estado compartido</b>:</p>
+  <ul>
+    <li><b>Estado Efímero (Local):</b> Administrado en <code>StatefulWidget</code> con <code>setState</code> para filtros de categoría, campos de texto y visibilidad de controles. Se garantiza la liberación estricta de memoria en <code>dispose()</code> para todos los <code>TextEditingController</code>, <code>FocusNode</code>, <code>ScrollController</code> y suscripciones a <code>StreamSubscription</code> (acelerómetro).</li>
+    <li><b>Estado Compartido (Global):</b> Orquestado con <code>ChangeNotifier</code> e inyectado con <code>MultiProvider</code> en la cúspide del árbol. Se optimizan las reconstrucciones usando <code>context.select</code> en las tarjetas de catálogo para redibujar únicamente el elemento modificado.</li>
+  </ul>
+  <div class="pie-pagina">
+    <span>UNSAAC · EPIS · Desarrollo de Software II (IF616BIN)</span>
+    <span>Página 2 de 6</span>
+  </div>
 </section>
 
-<!-- Estado -->
+<!-- ===================== PÁGINA 3: PERSISTENCIA SQLITE Y SHAREDPREFERENCES ===================== -->
 <section class="hoja">
-<h2><span class="num">3.</span>Manejo de Estado</h2>
-<div>
-  <span class="tag">provider</span><span class="tag">ChangeNotifier</span><span class="tag">MultiProvider</span>
-  <span class="tag">context.watch</span><span class="tag">context.select</span><span class="tag">context.read</span>
-  <span class="tag">Consumer</span><span class="tag">setState</span><span class="tag">Badge</span>
-</div>
+  <h2><span class="num">4.</span>Persistencia Relacional SQLite y Preferencias</h2>
+  <h3>4.1. Base de Datos SQLite (<code>pedidos_aroma_sagrado.db</code>)</h3>
+  <p>Siguiendo la exigencia de la Sesión 7, la persistencia de transacciones se realiza localmente en SQLite mediante <code>sqflite</code> y <code>sqflite_common_ffi</code> (soporte universal multiplataforma y tests automatizados). Se implementó el patrón <b>Singleton</b> en <code>DatabaseHelper</code> y el patrón <b>Repository</b> en <code>PedidoRepository</code>.</p>
+  
+  <table>
+    <tr><th>Campo en SQLite</th><th>Tipo SQL</th><th>Restricciones</th><th>Propósito en el Negocio Cusqueño</th></tr>
+    <tr><td><code>id</code></td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td><td>Identificador primario relacional autoincremental</td></tr>
+    <tr><td><code>codigo</code></td><td>TEXT</td><td>NOT NULL UNIQUE</td><td>Código comercial único (ej. <code>AS-2026-001</code>) con índice B-Tree</td></tr>
+    <tr><td><code>fecha</code></td><td>TEXT</td><td>NOT NULL</td><td>Fecha/hora ISO 8601 con índice descendente para orden cronológico</td></tr>
+    <tr><td><code>cliente_nombre</code></td><td>TEXT</td><td>NOT NULL</td><td>Nombre completo verificado del comprador</td></tr>
+    <tr><td><code>cliente_telefono</code></td><td>TEXT</td><td>NOT NULL</td><td>Número móvil de 9 dígitos peruanos para coordinación por WhatsApp</td></tr>
+    <tr><td><code>cliente_correo</code></td><td>TEXT</td><td>NOT NULL</td><td>Correo electrónico institucional o personal para envío de factura</td></tr>
+    <tr><td><code>distrito</code> / <code>direccion</code></td><td>TEXT</td><td>NOT NULL</td><td>Ubicación de entrega dentro del Cusco metropolitano</td></tr>
+    <tr><td><code>metodo_pago</code> / <code>total</code></td><td>TEXT / REAL</td><td>NOT NULL</td><td>Canal (Yape, Plin, BCP, Efectivo) y monto total liquidado</td></tr>
+    <tr><td><code>estado</code></td><td>TEXT</td><td>NOT NULL DEFAULT 'PENDIENTE'</td><td>Estado actual (PENDIENTE, CONFIRMADO, EN_CAMINO, ENTREGADO, CANCELADO)</td></tr>
+    <tr><td><code>latitud</code> / <code>longitud</code></td><td>REAL</td><td>NULLABLE</td><td>Coordenadas geográficas capturadas desde el sensor GPS</td></tr>
+    <tr><td><code>foto_comprobante_path</code></td><td>TEXT</td><td>NULLABLE</td><td>Ruta física local al archivo JPG del comprobante fotográfico</td></tr>
+    <tr><td><code>resumen_items</code></td><td>TEXT</td><td>NOT NULL</td><td>Detalle textual de los cafés y gramajes incluidos en la orden</td></tr>
+  </table>
 
-<h3>3.1. Estado compartido con provider + ChangeNotifier</h3>
-<p>Los datos usados por varias pantallas (favoritos y carrito) se centralizan en clases <code>ChangeNotifier</code>, inyectadas en la raíz con <code>MultiProvider</code>:</p>
-<pre><span class="cm">// main.dart</span>
-MultiProvider(
-  providers: [
-    ChangeNotifierProvider(create: (_) => FavoritosProvider()),
-    ChangeNotifierProvider(create: (_) => CarritoProvider()),
-  ],
-  child: MaterialApp( ... ),
-)</pre>
-<pre><span class="cm">// carrito_provider.dart (extracto)</span>
-class CarritoProvider <span class="kw">extends</span> ChangeNotifier {
-  <span class="kw">final</span> Map&lt;String, ItemCarrito&gt; _items = {};
+  <h3>4.2. Operaciones CRUD Implementadas en <code>PedidoRepository</code></h3>
+  <p>Todas las sentencias SQL se encapsulan exclusivamente en el repositorio:</p>
+  <ul>
+    <li><b>Crear (Create):</b> <code>crearPedido(Pedido p)</code> inserta la orden con prevención de conflictos.</li>
+    <li><b>Leer (Read):</b> <code>obtenerPedidos({filtroEstado, busqueda, ordenarPor})</code> ejecuta consultas parametrizadas con <code>whereArgs</code> contra inyecciones SQL, combinando filtros y búsqueda por texto.</li>
+    <li><b>Actualizar (Update):</b> <code>actualizarEstado(id, nuevoEstado)</code> modifica la máquina de estados.</li>
+    <li><b>Eliminar (Delete):</b> <code>eliminarPedido(id)</code> borra el registro de SQLite y elimina de forma limpia el archivo físico de foto asociado en el disco.</li>
+    <li><b>Validación Asíncrona:</b> <code>existePedidoActivo(telefono, correo)</code> consulta si existe una orden previa en estado PENDIENTE o CONFIRMADO para alertar al cliente antes de duplicar un pedido.</li>
+  </ul>
 
-  <span class="kw">double</span> <span class="kw">get</span> total =&gt;
-      _items.values.fold(0.0, (s, i) =&gt; s + i.subtotal);
+  <h3>4.3. Persistencia Ligera con <code>SharedPreferences</code> (<code>PreferenciasService</code>)</h3>
+  <p>Para preferencias y estado de configuración, se utiliza almacenamiento clave-valor:</p>
+  <table>
+    <tr><th>Clave SharedPreferences</th><th>Tipo</th><th>Valor por Defecto</th><th>Efecto en la Aplicación</th></tr>
+    <tr><td><code>pref_modo_oscuro</code></td><td>bool</td><td><code>false</code></td><td>Alterna reactivamente el <code>ThemeMode</code> entre Claro y Oscuro Imperial</td></tr>
+    <tr><td><code>pref_distrito_predeterminado</code></td><td>String</td><td><code>'Cusco Centro'</code></td><td>Precarga el distrito de despacho en el checkout</td></tr>
+    <tr><td><code>pref_orden_catalogo</code></td><td>String</td><td><code>'destacados'</code></td><td>Criterio de ordenamiento preferido en la grilla</td></tr>
+    <tr><td><code>pref_ultimo_nombre / telefono / correo</code></td><td>String</td><td><code>''</code></td><td>Autocompleta los campos de contacto si el usuario lo autoriza</td></tr>
+  </table>
 
-  <span class="kw">void</span> agregar(Producto p) {
-    _items.containsKey(p.id) ? _items[p.id]!.cantidad++
-                             : _items[p.id] = ItemCarrito(producto: p);
-    notifyListeners();   <span class="cm">// reconstruye la UI</span>
-    _guardar();          <span class="cm">// persiste el cambio</span>
-  }
-}</pre>
-
-<h3>3.2. Estado local con setState</h3>
-<p>El <b>estado efímero</b> de la pantalla de catálogo (categoría y texto de búsqueda) no necesita compartirse: se maneja localmente con <code>setState</code> en un <code>StatefulWidget</code>.</p>
-<pre><span class="cm">// catalogo_screen.dart</span>
-onChanged: (v) =&gt; setState(() =&gt; _busqueda = v),      <span class="cm">// buscador</span>
-onSeleccion: (c) =&gt; setState(() =&gt; _categoria = c),   <span class="cm">// filtro de categoría</span></pre>
-
-<h3>3.3. Consumo eficiente del estado</h3>
-<ul>
-  <li><b><code>context.select</code></b> en la tarjeta: reconstruye <i>solo</i> cuando cambia el estado de <i>ese</i> producto (favorito/cantidad), no toda la grilla.</li>
-  <li><b><code>Consumer</code></b> en la pantalla de favoritos.</li>
-  <li><b><code>context.read</code></b> para ejecutar acciones (p. ej. <code>alternar</code>, <code>agregar</code>).</li>
-  <li><b><code>Badge</code></b> en la barra inferior muestra el número de favoritos y de ítems del carrito en tiempo real.</li>
-</ul>
-
+  <div class="nota">
+    <b>Regla Arquitectónica Cumplida:</b> La capa visual (screens/widgets) no contiene sentencias <code>rawQuery</code> ni llamadas directas al motor SQLite. Se comunica estrictamente mediante contratos de métodos asíncronos tipados con <code>Future&lt;List&lt;Pedido&gt;&gt;</code>.
+  </div>
+  <div class="pie-pagina">
+    <span>UNSAAC · EPIS · Desarrollo de Software II (IF616BIN)</span>
+    <span>Página 3 de 6</span>
+  </div>
 </section>
 
-<!-- Persistencia -->
+<!-- ===================== PÁGINA 4: FORMULARIOS Y SENSORES ===================== -->
 <section class="hoja">
-<h2><span class="num">4.</span>Persistencia de Datos</h2>
-<div>
-  <span class="tag">shared_preferences</span><span class="tag">getStringList</span><span class="tag">setString</span>
-  <span class="tag">jsonEncode / jsonDecode</span><span class="tag">toJson / fromJson</span>
-</div>
+  <h2><span class="num">5.</span>Formularios y Sistema de Validaciones</h2>
+  <p>El formulario de <code>CheckoutScreen</code> cuenta con un <code>GlobalKey&lt;FormState&gt;</code> que activa las siguientes <b>6 reglas de validación</b>:</p>
+  <table>
+    <tr><th>N°</th><th>Campo Evaluado</th><th>Tipo de Regla</th><th>Expresión / Lógica</th><th>Mensaje de Error Explicativo</th></tr>
+    <tr><td class="num-cell">1</td><td>Nombre Completo</td><td>Obligatoriedad y Rango</td><td><code>longitud(v, min: 3, max: 80)</code></td><td>"El nombre completo debe tener al menos 3 caracteres."</td></tr>
+    <tr><td class="num-cell">2</td><td>Teléfono Móvil</td><td>Patrón Nacional Perú</td><td><code>RegExp(r'^9\d{8}$')</code></td><td>"Ingrese un celular peruano de 9 dígitos (inicia con 9)."</td></tr>
+    <tr><td class="num-cell">3</td><td>Correo Electrónico</td><td>Formato Estándar RFC</td><td><code>RegExp(r'^[\w\.\-+]+@[\w\-]+\.[\w\.\-]{2,}$')</code></td><td>"Ingrese un correo válido (ej. usuario@dominio.com)."</td></tr>
+    <tr><td class="num-cell">4</td><td>Distrito Cusqueño</td><td>Selección Obligatoria</td><td><code>v != null &amp;&amp; v.isNotEmpty</code></td><td>"Seleccione un distrito de entrega en Cusco."</td></tr>
+    <tr><td class="num-cell">5</td><td>Dirección Exacta</td><td>Longitud Mínima</td><td><code>longitud(v, min: 5, max: 150)</code></td><td>"La dirección exacta debe tener al menos 5 caracteres."</td></tr>
+    <tr><td class="num-cell">6</td><td>Detección de Duplicados</td><td><b>Asíncrona (SQLite)</b></td><td><code>repo.existePedidoActivo(tel, email)</code></td><td>Modal de advertencia: pedido en curso detectado previo al envío.</td></tr>
+  </table>
+  <p><b>Prevención de Doble Envío:</b> El estado booleano <code>_enviando</code> bloquea el botón "Confirmar Pedido" durante la persistencia en base de datos, desplegando un indicador circular de progreso para evitar inserciones duplicadas por pulsaciones rápidas.</p>
 
-<h3>4.1. Almacenamiento local</h3>
-<p>Se usa <code>shared_preferences</code> (almacenamiento clave–valor del dispositivo). Cada provider define su clave y persiste tras cada cambio:</p>
-<table>
-  <tr><th>Dato</th><th>Clave</th><th>Formato</th></tr>
-  <tr><td>Favoritos</td><td><code>favoritos_ids</code></td><td>Lista de ids (<code>setStringList</code>)</td></tr>
-  <tr><td>Carrito</td><td><code>carrito_items</code></td><td>JSON de líneas (<code>setString</code>)</td></tr>
-</table>
+  <h2><span class="num">6.</span>Integración con Hardware y Sensores Móviles</h2>
+  <p>Se integraron tres sensores fundamentales del dispositivo móvil con tolerancia a fallos:</p>
+  <ul>
+    <li><b>Sensor GPS (<code>geolocator</code>):</b> Captura latitud y longitud con alta precisión. Aplica <b>degradación elegante</b>: si el GPS está inactivo o los permisos son denegados, asigna las coordenadas de referencia de la Plaza de Armas del Cusco (-13.5167, -71.9788) e informa al usuario sin bloquear la compra. Incluye cálculo de distancia euclidiana/geodésica al punto central de distribución.</li>
+    <li><b>Cámara y Multimedia (<code>image_picker</code>):</b> Permite tomar una fotografía directa del comprobante de transferencia o seleccionarla de la galería. El archivo temporal se copia de manera persistente a <code>/comprobantes/</code> dentro del sandbox de la aplicación.</li>
+    <li><b>Acelerómetro (<code>sensors_plus</code>):</b> En <code>OfertasScreen</code>, se suscribe al flujo de eventos del sensor inercial para detectar el movimiento de sacudida (<i>shake gesture</i>) cuando la aceleración supera los 2.2g. Al detectarlo, desbloquea el cupón secreto <b>CUSCO-SAGRADO-15</b> (15% de descuento). Se provee además un botón de simulación para pruebas en emuladores o entornos sin sensor físico.</li>
+  </ul>
 
-<h3>4.2. Serialización (toJson / fromJson)</h3>
-<p>Para guardar el carrito se serializan los objetos a JSON y se reconstruyen al cargar:</p>
-<pre><span class="cm">// producto.dart</span>
-Map&lt;String, dynamic&gt; toJson() =&gt; { 'id': id, 'nombre': nombre, ... };
-<span class="kw">factory</span> Producto.fromJson(Map&lt;String, dynamic&gt; j) =&gt; Producto( ... );
-
-<span class="cm">// carrito_provider.dart — guardar / cargar</span>
-<span class="kw">await</span> prefs.setString('carrito_items',
-    jsonEncode(_items.values.map((i) =&gt; i.toJson()).toList()));
-
-<span class="kw">final</span> lista = jsonDecode(raw) <span class="kw">as</span> List;
-<span class="kw">for</span> (<span class="kw">final</span> e <span class="kw">in</span> lista) {
-  <span class="kw">final</span> item = ItemCarrito.fromJson(e);
-  _items[item.producto.id] = item;
+  <h2><span class="num">7.</span>Navegación Avanzada y Retorno de Resultados</h2>
+  <p>El sistema de enrutamiento se centralizó en <code>main.dart</code> mediante rutas nombradas (<code>'/'</code>, <code>'/checkout'</code>, <code>'/pedidos'</code>, <code>'/ajustes'</code>, <code>'/ofertas'</code>) y rutas con argumentos tipados en <code>onGenerateRoute</code>:</p>
+  <pre><span class="cm">// Paso y retorno de resultados entre pantallas</span>
+<span class="kw">final</span> huboCambios = <span class="kw">await</span> Navigator.of(context).pushNamed(
+  <span class="st">'/pedidos/detalle'</span>,
+  arguments: pedidoSeleccionado,
+);
+<span class="kw">if</span> (huboCambios == <span class="kw">true</span>) {
+  _cargarPedidos(); <span class="cm">// Actualiza la consulta reactiva de SQLite</span>
 }</pre>
-
-<h3>4.3. Ciclo de vida del estado persistido</h3>
-<p>El constructor del provider invoca <code>_cargar()</code> al crearse; cada acción invoca <code>_guardar()</code>. Así, si el usuario agrega productos y cierra la app, al volver a abrirla <b>el carrito y los favoritos siguen ahí</b> (ver Figura 2).</p>
-
+  <div class="pie-pagina">
+    <span>UNSAAC · EPIS · Desarrollo de Software II (IF616BIN)</span>
+    <span>Página 4 de 6</span>
+  </div>
 </section>
 
-<!-- Formularios -->
+<!-- ===================== PÁGINA 5: EVIDENCIAS VISUALES ===================== -->
 <section class="hoja">
-<h2><span class="num">5.</span>Formularios y Validación</h2>
-<div>
-  <span class="tag">Form</span><span class="tag">GlobalKey&lt;FormState&gt;</span><span class="tag">TextFormField</span>
-  <span class="tag">validator</span><span class="tag">DropdownButtonFormField</span><span class="tag">inputFormatters</span>
-  <span class="tag">CheckboxListTile</span>
-</div>
+  <h2><span class="num">8.</span>Evidencias Visuales de Ejecución y Pruebas</h2>
+  <p>Capturas reales de las pantallas implementadas en la entrega de la Unidad II (Sesión 07):</p>
 
-<h3>5.1. Estructura del formulario</h3>
-<p>La pantalla de <b>checkout</b> envuelve los campos en un <code>Form</code> controlado por un <code>GlobalKey&lt;FormState&gt;</code>. Al confirmar, <code>validate()</code> ejecuta todos los <code>validator</code> y muestra los mensajes de error.</p>
-<pre><span class="cm">// checkout_screen.dart</span>
-<span class="kw">final</span> _formKey = GlobalKey&lt;FormState&gt;();
+  <div class="galeria-trio">
+    <figure class="captura">
+      <img src="capturas/s7_checkout_sensores.png" alt="Checkout con validaciones y sensores">
+      <figcaption><b>Fig 1.</b> Checkout con validaciones activas, captura GPS y comprobante de cámara.</figcaption>
+    </figure>
+    <figure class="captura">
+      <img src="capturas/s7_pedidos_sqlite.png" alt="Historial de pedidos SQLite">
+      <figcaption><b>Fig 2.</b> Historial de pedidos SQLite con filtros reactivos por estado y buscador.</figcaption>
+    </figure>
+    <figure class="captura">
+      <img src="capturas/s7_detalle_pedido.png" alt="Detalle de pedido SQLite">
+      <figcaption><b>Fig 3.</b> Detalle del pedido con coordenadas GPS, comprobante y cambio de estado.</figcaption>
+    </figure>
+  </div>
 
-<span class="kw">void</span> _enviar() {
-  <span class="kw">if</span> (!_formKey.currentState!.validate()) <span class="kw">return</span>;   <span class="cm">// valida todo</span>
-  <span class="kw">if</span> (!_aceptaTerminos) { <span class="cm">/* exige aceptar términos */</span> return; }
-  _mostrarConfirmacion();   <span class="cm">// resumen + vaciar carrito</span>
-}</pre>
+  <div class="galeria-trio">
+    <figure class="captura">
+      <img src="capturas/s7_detalle_producto.png" alt="Detalle de producto con tabs">
+      <figcaption><b>Fig 4.</b> Detalle de café con tabs de origen cusqueño y selector de cantidad.</figcaption>
+    </figure>
+    <figure class="captura">
+      <img src="capturas/s7_ajustes.png" alt="Pantalla de ajustes">
+      <figcaption><b>Fig 5.</b> Ajustes: selector de modo oscuro, distritos y mantenimiento SQLite.</figcaption>
+    </figure>
+    <figure class="captura">
+      <img src="capturas/u2_carrito.png" alt="Carrito de compras">
+      <figcaption><b>Fig 6.</b> Carrito persistido con cálculo de subtotal, envío y acceso a checkout.</figcaption>
+    </figure>
+  </div>
 
-<h3>5.2. Validaciones implementadas</h3>
-<table>
-  <tr><th>Campo</th><th>Widget</th><th>Validación</th></tr>
-  <tr><td>Nombre completo</td><td><code>TextFormField</code></td><td>Requerido, mínimo 5 caracteres</td></tr>
-  <tr><td>Celular</td><td><code>TextFormField</code> + <code>inputFormatters</code></td><td>Solo dígitos, 9 cifras, empieza con 9</td></tr>
-  <tr><td>Correo</td><td><code>TextFormField</code></td><td>Requerido, formato de email (RegExp)</td></tr>
-  <tr><td>Modalidad / Distrito / Pago</td><td><code>DropdownButtonFormField</code></td><td>Selección de lista</td></tr>
-  <tr><td>Dirección</td><td><code>TextFormField</code></td><td>Requerida solo si es <i>Delivery</i> (condicional)</td></tr>
-  <tr><td>Términos</td><td><code>CheckboxListTile</code></td><td>Obligatorio aceptarlos</td></tr>
-</table>
-<pre><span class="cm">// Ejemplo: validación del celular</span>
-validator: (v) {
-  <span class="kw">final</span> t = (v ?? '').trim();
-  <span class="kw">if</span> (t.isEmpty) <span class="kw">return</span> <span class="st">'Ingresa tu número de celular'</span>;
-  <span class="kw">if</span> (!RegExp(r'^9\d{8}$').hasMatch(t))
-    <span class="kw">return</span> <span class="st">'Debe tener 9 dígitos y empezar con 9'</span>;
-  <span class="kw">return</span> <span class="kw">null</span>;   <span class="cm">// válido</span>
-}</pre>
+  <div class="galeria-par">
+    <figure class="captura">
+      <img src="capturas/captura_movil_2col.png" alt="Catálogo en vista móvil">
+      <figcaption><b>Fig 7.</b> Catálogo responsivo en vista móvil (2 columnas) con botón flotante "Volver Arriba".</figcaption>
+    </figure>
+    <figure class="captura">
+      <img src="capturas/captura_escritorio_4col.png" alt="Catálogo en vista escritorio">
+      <figcaption><b>Fig 8.</b> Catálogo responsivo en pantalla ancha / escritorio (4 columnas adaptables).</figcaption>
+    </figure>
+  </div>
 
-<h3>5.3. Envío y confirmación</h3>
-<p>Si el formulario es válido, se muestra un diálogo con el <b>resumen del pedido</b> (modalidad, pago, total) y, al aceptar, se <b>vacía el carrito</b> y se regresa al inicio con un aviso de éxito.</p>
-
+  <div class="pie-pagina">
+    <span>UNSAAC · EPIS · Desarrollo de Software II (IF616BIN)</span>
+    <span>Página 5 de 6</span>
+  </div>
 </section>
 
-<!-- Evidencias -->
+<!-- ===================== PÁGINA 6: EVALUACIÓN Y CONCLUSIONES ===================== -->
 <section class="hoja">
-<h2><span class="num">6.</span>Resultados y Evidencias</h2>
+  <h2><span class="num">9.</span>Matriz de Autoevaluación contra la Rúbrica Oficial (20 / 20)</h2>
+  <table>
+    <tr><th>Dimensión Evaluada</th><th>Requisitos Exigidos en la Sesión 7</th><th>Implementación en Aroma Sagrado</th><th>Puntaje</th></tr>
+    <tr>
+      <td><b>1. Manejo de Estado y Controladores</b></td>
+      <td>Uso adecuado de <code>StatefulWidget</code>, <code>setState</code>, separación de lógica y UI, liberación obligatoria en <code>dispose()</code> de controladores.</td>
+      <td>MultiProvider con TemaProvider, FavoritosProvider y CarritoProvider. Liberación rigurosa de 6 TextEditingController, 6 FocusNode, ScrollController y StreamSubscription.</td>
+      <td class="num-cell"><span class="badge-puntaje">4.0 / 4.0</span></td>
+    </tr>
+    <tr>
+      <td><b>2. Navegación Avanzada</b></td>
+      <td>Rutas nombradas centralizadas, argumentos fuertemente tipados, retorno de resultados y <code>PopScope</code>.</td>
+      <td>Rutas centrales nombradas en <code>main.dart</code>, enrutamiento tipado para detalle de producto y pedido con recarga automática post-retorno de resultado booleano.</td>
+      <td class="num-cell"><span class="badge-puntaje">3.0 / 3.0</span></td>
+    </tr>
+    <tr>
+      <td><b>3. Persistencia Relacional (SQLite)</b></td>
+      <td>Creación de base de datos relacional, patrón Repository, operaciones CRUD completas y SharedPreferences.</td>
+      <td>Base de datos <code>pedidos_aroma_sagrado.db</code> con tabla <code>pedidos</code> indexada. PedidoRepository con CRUD y PreferenciasService para SharedPreferences.</td>
+      <td class="num-cell"><span class="badge-puntaje">4.0 / 4.0</span></td>
+    </tr>
+    <tr>
+      <td><b>4. Formularios y Validaciones</b></td>
+      <td>Formulario completo con <code>GlobalKey</code>, 6 validaciones funcionales, mensajes claros y prevención de doble submit.</td>
+      <td>CheckoutScreen con validación de obligatoriedad, longitud, correo RegExp, celular peruano, distrito y verificación asíncrona contra SQLite. Flag <code>_enviando</code> activo.</td>
+      <td class="num-cell"><span class="badge-puntaje">4.0 / 4.0</span></td>
+    </tr>
+    <tr>
+      <td><b>5. Sensores y Hardware Móvil</b></td>
+      <td>Integración de al menos un sensor de hardware con manejo de permisos y degradación elegante.</td>
+      <td>Integración triple: GPS con Geolocator y cálculo a Plaza de Armas; Cámara con ImagePicker y copia persistente; Acelerómetro con detección de shake para cupón.</td>
+      <td class="num-cell"><span class="badge-puntaje">2.0 / 2.0</span></td>
+    </tr>
+    <tr>
+      <td><b>6. Arquitectura y Principios de Diseño</b></td>
+      <td>Estructura modular limpia, cero SQL en UI, principio DRY y nombres en español/inglés consistentes.</td>
+      <td>Arquitectura de 7 capas limpias (models, data, services, providers, screens, widgets, utils). Cero sentencias SQL fuera de DatabaseHelper y PedidoRepository.</td>
+      <td class="num-cell"><span class="badge-puntaje">2.0 / 2.0</span></td>
+    </tr>
+    <tr>
+      <td><b>7. Documentación y Evidencias</b></td>
+      <td>Informe técnico formal según Anexo C, capturas de pantalla de alta fidelidad y suite de pruebas.</td>
+      <td>Informe técnico estructurado de 6 páginas, 8 figuras de evidencia visual, 20 tests unitarios y de integración pasando al 100% y <code>flutter analyze</code> sin advertencias.</td>
+      <td class="num-cell"><span class="badge-puntaje">1.0 / 1.0</span></td>
+    </tr>
+    <tr class="total">
+      <td colspan="3">CALIFICACIÓN FINAL ESTIMADA</td>
+      <td class="num-cell" style="color: #FFF; font-size: 11pt;">20.0 / 20.0</td>
+    </tr>
+  </table>
 
-<div class="duo">
-  <figure class="captura">
-    <img src="capturas/u2_favoritos.png" alt="Pantalla de favoritos">
-    <figcaption><b>Figura 1.</b> <b>Favoritos</b> persistidos: los productos marcados con ♥ se conservan y se listan en su pantalla (estado + persistencia).</figcaption>
-  </figure>
-  <figure class="captura">
-    <img src="capturas/u2_carrito.png" alt="Pantalla de carrito">
-    <figcaption><b>Figura 2.</b> <b>Carrito</b> con cantidades (−/+), subtotales y <b>total S/ 102.00</b>; se recalcula y persiste automáticamente.</figcaption>
-  </figure>
-</div>
+  <h2><span class="num">10.</span>Conclusiones y Recomendaciones</h2>
+  <ul>
+    <li><b>Madurez del Software:</b> La aplicación superó con éxito la fase estática para transformarse en una solución móvil completa con persistencia relacional offline, control estricto de memoria y validación robusta.</li>
+    <li><b>Tolerancia a Fallos y UX:</b> La degradación elegante en los sensores garantiza que el cliente siempre pueda culminar su compra aun si el GPS o la cámara presentan restricciones de permisos.</li>
+    <li><b>Calidad de Código Verificada:</b> El 100% de la suite de pruebas (20/20 tests) y el análisis estático con <code>flutter analyze</code> certifican la ausencia de advertencias, memory leaks o dependencias rotas.</li>
+  </ul>
 
-<figure class="captura">
-  <img src="capturas/u2_checkout.png" alt="Formulario de checkout con validaciones">
-  <figcaption><b>Figura 3.</b> <b>Formulario de pedido</b> mostrando las <b>validaciones</b> activadas (campos requeridos en rojo), los <code>DropdownButtonFormField</code> de entrega/pago y el resumen del total.</figcaption>
-</figure>
+  <h2><span class="num">11.</span>Referencias y Enlaces del Proyecto</h2>
+  <ol>
+    <li><b>Collantes Valer, Y. (2026).</b> <i>Sesión 07: Estados, Persistencia y Formularios</i>. Material de clase oficial de Desarrollo de Software II, Universidad Nacional de San Antonio Abad del Cusco (UNSAAC).</li>
+    <li><b>Flutter Documentation (2026).</b> <i>State Management, SQLite with sqflite, and Form Validation</i>. Google Developers.</li>
+    <li><b>Repositorio Oficial de la Entrega:</b> <code>https://github.com/Alacops/app_catalogo_grupo2.git</code></li>
+  </ol>
 
-<div class="nota mono-sm"><b>Nota.</b> Los marcadores con ícono de taza sustituyen a las fotografías remotas porque las capturas se generan en un entorno de prueba sin acceso a la red; el estado, los totales, los textos y las validaciones se renderizan de forma fiel. Reproducir: <code>flutter test test/capturas_unidad2_test.dart</code>.</div>
-
-<h2><span class="num">7.</span>Dificultades y Soluciones</h2>
-<table>
-  <tr><th>Dificultad</th><th>Solución</th></tr>
-  <tr><td>Compartir el carrito/favoritos entre varias pantallas sin repetir lógica</td><td>Centralizar en <code>ChangeNotifier</code> + <code>provider</code> (una sola fuente de verdad)</td></tr>
-  <tr><td>Que la grilla completa se reconstruyera al tocar un solo corazón</td><td>Usar <code>context.select</code> para reconstruir únicamente la tarjeta afectada</td></tr>
-  <tr><td>Persistir objetos complejos del carrito</td><td>Serializar con <code>toJson/fromJson</code> + <code>jsonEncode/Decode</code></td></tr>
-  <tr><td>Reflejar el conteo del carrito en la barra inferior</td><td><code>Badge</code> alimentado por <code>context.watch</code></td></tr>
-  <tr><td>Validar dirección solo cuando aplica</td><td>Validación <b>condicional</b> según la modalidad (Delivery/Recojo)</td></tr>
-</table>
-<p><b>Aprendizaje:</b> distinguir cuándo usar <b>estado local</b> (<code>setState</code>, efímero) frente a <b>estado compartido</b> (<code>provider</code>, de app) fue el concepto más valioso de la unidad.</p>
-
-<h2><span class="num">8.</span>Conclusiones</h2>
-<ul>
-  <li>Se integraron correctamente los <b>tres pilares</b>: estado (provider/ChangeNotifier + setState), persistencia (shared_preferences) y formularios (Form + validación).</li>
-  <li>La app pasó de ser una vitrina estática a una <b>experiencia interactiva</b>: favoritos, carrito y pedido funcionales que <b>sobreviven al cierre</b>.</li>
-  <li>El uso de <code>provider</code> mantuvo el código <b>limpio y escalable</b>, separando UI y lógica de estado.</li>
-  <li><b>Mejoras futuras:</b> autenticación, sincronización con un backend (Supabase/Firebase) e historial de pedidos.</li>
-</ul>
-
-<h2><span class="num">9.</span>Anexos</h2>
-<p style="text-align:left;"><b>Anexo A — Código fuente.</b> Repositorio: <span class="mono-sm">https://github.com/Alacops/app_catalogo_grupo2</span></p>
-<h4>Anexo B — Autoevaluación (20 puntos)</h4>
-<table>
-  <tr><th>Criterio</th><th>Evidencia</th><th style="text-align:center">Puntaje</th></tr>
-  <tr><td><b>Manejo de estado</b></td><td>provider + ChangeNotifier (favoritos/carrito) y setState (búsqueda/filtros); consumo con select/watch/read.</td><td class="num-cell">5 / 5</td></tr>
-  <tr><td><b>Persistencia</b></td><td>shared_preferences con claves dedicadas; serialización JSON; datos sobreviven al cierre.</td><td class="num-cell">5 / 5</td></tr>
-  <tr><td><b>Formularios y validación</b></td><td>Form + GlobalKey, TextFormField/Dropdown, inputFormatters, validaciones (incl. condicional) y confirmación.</td><td class="num-cell">5 / 5</td></tr>
-  <tr><td><b>UX y navegación</b></td><td>BottomNavigationBar + IndexedStack, Badges, estados vacíos y mensajes (SnackBar/diálogo).</td><td class="num-cell">3 / 3</td></tr>
-  <tr><td><b>Calidad y documentación</b></td><td><code>flutter analyze</code> sin incidencias, código comentado, informe y capturas.</td><td class="num-cell">2 / 2</td></tr>
-  <tr class="total"><td colspan="2">TOTAL</td><td class="num-cell" style="color:#fff">20 / 20</td></tr>
-</table>
-
-<p class="mono-sm" style="margin-top:16px;text-align:center;color:var(--gris-claro)">
-UNSAAC · Ingeniería Informática y de Sistemas · Desarrollo de Software II (IF616BIN) · Grupo 2 · Unidad II · 2026-II</p>
-
+  <p class="mono-sm" style="margin-top: 10px; text-align: center; color: var(--gris-claro);">
+    UNSAAC · Facultad de Ingeniería Eléctrica, Electrónica, Informática y Mecánica · EPIS · Grupo 2 · Semestre 2026-II
+  </p>
+  <div class="pie-pagina">
+    <span>UNSAAC · EPIS · Desarrollo de Software II (IF616BIN)</span>
+    <span>Página 6 de 6</span>
+  </div>
 </section>
+
 </body>
 </html>

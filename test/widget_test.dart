@@ -1,12 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:app_catalogo_grupo2/main.dart';
+import 'package:app_catalogo_grupo2/services/preferencias_service.dart';
 
 void main() {
-  setUp(() {
-    // Mock de persistencia para las pruebas (favoritos/carrito vacíos).
+  setUp(() async {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
     SharedPreferences.setMockInitialValues({});
+    await PreferenciasService.inicializar();
   });
 
   testWidgets('La app arranca y muestra el catálogo con navegación',

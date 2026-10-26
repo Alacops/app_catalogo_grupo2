@@ -39,6 +39,8 @@ class FavoritosProvider extends ChangeNotifier {
     _guardar();
   }
 
+  void alternarFavorito(Producto producto) => alternar(producto.id);
+
   Future<void> _cargar() async {
     final prefs = await SharedPreferences.getInstance();
     final lista = prefs.getStringList(_clave) ?? const [];
