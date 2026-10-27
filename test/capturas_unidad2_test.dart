@@ -16,6 +16,11 @@ import 'package:app_catalogo_grupo2/screens/carrito_screen.dart';
 import 'package:app_catalogo_grupo2/screens/catalogo_screen.dart';
 import 'package:app_catalogo_grupo2/screens/checkout_screen.dart';
 import 'package:app_catalogo_grupo2/screens/favoritos_screen.dart';
+import 'package:app_catalogo_grupo2/screens/detalle_producto_screen.dart';
+import 'package:app_catalogo_grupo2/screens/historial_pedidos_screen.dart';
+import 'package:app_catalogo_grupo2/screens/detalle_pedido_screen.dart';
+import 'package:app_catalogo_grupo2/screens/ajustes_screen.dart';
+import 'package:app_catalogo_grupo2/models/pedido.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:app_catalogo_grupo2/services/preferencias_service.dart';
@@ -202,4 +207,82 @@ void main() {
       }
     });
   });
+
+  testWidgets('s7 detalle producto con foto real', (tester) async {
+    _sembrarEstado();
+    await _capturar(
+      tester,
+      pantalla: DetalleProductoScreen(producto: CatalogoData.productos.first),
+      physicalSize: const Size(1080, 2200),
+      dpr: 2.4,
+      archivo: 's7_detalle_producto.png',
+    );
+  });
+
+  testWidgets('s7 pedidos sqlite', (tester) async {
+    _sembrarEstado();
+    await _capturar(
+      tester,
+      pantalla: const HistorialPedidosScreen(),
+      physicalSize: const Size(1080, 2200),
+      dpr: 2.4,
+      archivo: 's7_pedidos_sqlite.png',
+      interaccion: (t) async {
+        await t.pump(const Duration(milliseconds: 500));
+      },
+    );
+  });
+
+  testWidgets('s7 detalle pedido', (tester) async {
+    _sembrarEstado();
+    final pedidoDemo = Pedido(
+      id: 1,
+      codigo: 'AS-2026-001',
+      fecha: DateTime.now().subtract(const Duration(hours: 4)),
+      clienteNombre: 'Edmil Jampier Saire Bustamante',
+      clienteTelefono: '984123456',
+      clienteCorreo: 'edmil.saire@unsaac.edu.pe',
+      distrito: 'Wanchaq',
+      direccion: 'Av. De la Cultura 733 (Ciudad Universitaria Perayoc)',
+      metodoPago: 'Yape / Plin',
+      total: 77.0,
+      subtotal: 72.0,
+      costoEnvio: 5.0,
+      descuento: 0.0,
+      estado: EstadoPedido.confirmado,
+      latitud: -13.5226,
+      longitud: -71.9673,
+      resumenItems: 'Café Geisha Especial La Convención (x2)',
+    );
+    await _capturar(
+      tester,
+      pantalla: DetallePedidoScreen(pedido: pedidoDemo),
+      physicalSize: const Size(1080, 2200),
+      dpr: 2.4,
+      archivo: 's7_detalle_pedido.png',
+    );
+  });
+
+  testWidgets('s7 checkout con sensores', (tester) async {
+    _sembrarEstado();
+    await _capturar(
+      tester,
+      pantalla: const CheckoutScreen(),
+      physicalSize: const Size(1080, 2400),
+      dpr: 2.4,
+      archivo: 's7_checkout_sensores.png',
+    );
+  });
+
+  testWidgets('s7 ajustes', (tester) async {
+    _sembrarEstado();
+    await _capturar(
+      tester,
+      pantalla: const AjustesScreen(),
+      physicalSize: const Size(1080, 2200),
+      dpr: 2.4,
+      archivo: 's7_ajustes.png',
+    );
+  });
 }
+

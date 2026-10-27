@@ -11,6 +11,7 @@ import 'package:app_catalogo_grupo2/providers/carrito_provider.dart';
 import 'package:app_catalogo_grupo2/providers/favoritos_provider.dart';
 import 'package:app_catalogo_grupo2/screens/catalogo_screen.dart';
 import 'package:app_catalogo_grupo2/services/preferencias_service.dart';
+import 'support/fake_network_images.dart';
 
 /// Carpeta de salida de las capturas (relativa a la raíz del proyecto):
 /// informe/capturas/
@@ -108,9 +109,13 @@ Future<void> _capturar(
     ),
   );
 
-  await tester.pump(const Duration(milliseconds: 600));
+  await tester.pump(const Duration(milliseconds: 400));
 
   await tester.runAsync(() async {
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 120));
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+    }
     final boundary =
         key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
     if (boundary == null) return;
@@ -119,8 +124,17 @@ Future<void> _capturar(
     if (byteData == null) return;
     final dir = Directory(_carpetaSalida);
     if (!dir.existsSync()) dir.createSync(recursive: true);
+    final bytes = byteData.buffer.asUint8List();
     final file = File('$_carpetaSalida/$archivo');
-    await file.writeAsBytes(byteData.buffer.asUint8List());
+    await file.writeAsBytes(bytes);
+
+    // Sincronizar también con el prefijo real_* si aplica
+    if (archivo == 'captura_movil_2col.png') {
+      await File('$_carpetaSalida/real_movil_2col.png').writeAsBytes(bytes);
+    } else if (archivo == 'captura_escritorio_4col.png') {
+      await File('$_carpetaSalida/real_escritorio_4col.png').writeAsBytes(bytes);
+    }
+
     // ignore: avoid_print
     print('Captura generada: ${file.absolute.path}');
   });
@@ -130,6 +144,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
+    HttpOverrides.global = FakeImageHttpOverrides();
     SharedPreferences.setMockInitialValues({});
     await PreferenciasService.inicializar();
     await _cargarFuentesCompletas();
